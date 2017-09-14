@@ -2,15 +2,19 @@
 * 100% work by Minghao Huang (Austin) StudentId: 813072 The University of Melbourne
 * */
 
-package project2.Helper;
+package project2.Elements;
 
 
+import org.lwjgl.input.Controllers;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.App;
+import project2.Controllers.Loader;
 import project2.Controllers.World;
+
+import java.util.ArrayList;
 
 
 public class BasicObject {
@@ -20,6 +24,7 @@ public class BasicObject {
     private Boolean moveable;
     private BasicTerrain occupiedTerrain;
     private ObjectType objectType;
+    private ArrayList<Loader.Tag> tags;
 
 
 
@@ -31,6 +36,8 @@ public class BasicObject {
         this.world = world;
         this.objectType = object;
 
+        this.tags = new ArrayList<>();
+
         switch (object) {
             case STONE:
                 moveable = true;
@@ -39,6 +46,7 @@ public class BasicObject {
             case PLAYER_LEFT:
                 moveable = true;
                 objectTile = new Image("res/player_left.png");
+                tags.add(Loader.Tag.PLAYER);
                 break;
         }
     }
@@ -180,6 +188,13 @@ public class BasicObject {
 
     public ObjectType getObjectType() {
         return objectType;
+    }
+
+    public Boolean hasTag(Loader.Tag tag) {
+        if (tags.contains(tag)) {
+            return true;
+        }
+        return false;
     }
 
 }

@@ -3,7 +3,7 @@
 * */
 
 
-package project2.Helper;
+package project2.Elements;
 
 
 import org.newdawn.slick.Graphics;

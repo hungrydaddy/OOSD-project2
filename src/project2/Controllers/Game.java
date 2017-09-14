@@ -4,27 +4,70 @@
 
 package project2.Controllers;
 
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+
+
+import org.newdawn.slick.*;
+
+import java.util.ArrayList;
 
 public class Game {
 
-    private World world;
+    private int currentLvl;
+    private int numberOfMoves;
+    private ArrayList<String> worldSnapshots;
+    private World currentWorld;
+
 
     public Game() throws SlickException {
-        world = new World();
-        // TODO: do shit
+        // initialising the game, starting from lvl 0
+        currentLvl = 0;
+        numberOfMoves = 0;
+        currentWorld = new World(currentLvl);
+        worldSnapshots = new ArrayList<>();
     }
 
 
     public void update(Input input, int delta) throws SlickException {
-        world.update(input, delta);
+        if (input.isKeyPressed(Input.KEY_R)) {
+            startLevel(currentLvl);
+        } else if (input.isKeyPressed(Input.KEY_Z)) {
+            rewind();
+        } else {
+            // a valid move for player
+            currentWorld.update(input, delta);
+            // after updating, take a snapshot
+        }
     }
 
 
     public void render(Graphics g) throws SlickException {
-        world.render(g);
+        currentWorld.render(g);
+
+        // showing the number of moves
+        g.drawString("Moves: " + numberOfMoves, 20.0f, 20.0f);
+    }
+
+
+
+
+
+
+
+
+
+
+    /* helper functions */
+
+
+    // go backwards
+    private void rewind() {
+    }
+
+    // purge everything and restart
+    private void startLevel(int level) throws SlickException {
+        worldSnapshots.clear();
+        numberOfMoves = 0;
+        currentWorld = new World(level);
     }
 
 }

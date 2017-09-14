@@ -7,9 +7,13 @@ package project2.Controllers;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import project2.Helper.BasicObject;
-import project2.Helper.BasicTerrain;
+import project2.Elements.BasicObject;
+import project2.Elements.BasicTerrain;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class World {
@@ -22,6 +26,7 @@ public class World {
 	public Integer width;
 
 
+
 	public enum Directions {
 		LEFT, RIGHT, UP, DOWN
 	}
@@ -31,10 +36,13 @@ public class World {
 
 
 
-	public World() throws SlickException {
-		ArrayList<String> lvlInfo = Loader.loadLevel(0);
+	public World(int level) throws SlickException {
+		ArrayList<String> lvlInfo = loadLevelFile(level);
 		setupOffsets(lvlInfo.get(0));
-		map = parseLevel(lvlInfo);
+
+		map = Loader.parseLevel(lvlInfo, this);
+		// find the player
+		player = Loader.findObjectByTag(Loader.Tag.PLAYER, this);
 	}
 
 
@@ -72,52 +80,25 @@ public class World {
 
 
 
+	//
+	private ArrayList<String> loadLevelFile(int level) {
+		String lvlFilePath = "res/levels/" + level + ".lvl";
+		ArrayList<String> lvlInfo = new ArrayList<String>();
+		String line;
 
-
-	// parsing the level info into a map
-	public BasicTerrain[][] parseLevel(ArrayList<String> lvlInfo)
-			throws SlickException {
-		BasicTerrain[][] map = new BasicTerrain[height][width];
-
-		// remove the first line - map size info
-		lvlInfo.remove(0);
-
-		// iterate to parse the map
-		for (int i = 0;i < lvlInfo.size();i++) {
-			String[] temp = lvlInfo.get(i).split(",");
-			Integer row = Integer.parseInt(temp[1]);
-			Integer column = Integer.parseInt(temp[2]);
-			Integer x = row * App.TILE_SIZE;
-			Integer y = column * App.TILE_SIZE;
-
-			// applying different rules to objects and terrains
-			switch (temp[0]) {
-				case "floor":
-					map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.FLOOR, row, column, this);
-					break;
-				case "wall":
-					map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.WALL, row, column, this);
-					break;
-				case "target":
-					map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.TARGET, row, column, this);
-					break;
-				case "stone":
-					//map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.STONE, row, column, this);
-					map[column][row].occupy(new BasicObject(BasicObject.ObjectType.STONE, this));
-					break;
-				case "player":
-					player = new BasicObject(BasicObject.ObjectType.PLAYER_LEFT, this);
-					map[column][row].occupy(player);
-					break;
-				default:
-					map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.EMPTY, row, column, this);
-					break;
+		// try reading the csv file and append it to an array for later usage
+		try (BufferedReader reader = new BufferedReader(new FileReader(lvlFilePath))) {
+			while ((line = reader.readLine()) != null) {
+				lvlInfo.add(line);
 			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
-		return map;
+		return lvlInfo;
 	}
-
 
 
 }
