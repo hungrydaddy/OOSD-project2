@@ -8,7 +8,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import project2.Elements.BasicObject;
-import project2.Elements.BasicTerrain;
+import project2.Elements.Environment.BasicTerrain;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -25,11 +25,8 @@ public class World {
 	public Integer height;
 	public Integer width;
 
+	private Game game;
 
-
-	public enum Directions {
-		LEFT, RIGHT, UP, DOWN
-	}
 
 	// objects under user control
 	private BasicObject player;
@@ -98,6 +95,13 @@ public class World {
 		}
 
 		return lvlInfo;
+	}
+
+
+
+	public void gameOver() throws SlickException {
+		// put some fancy stuff on the screen
+		game.restartCurrentLevel();
 	}
 
 

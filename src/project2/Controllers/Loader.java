@@ -6,12 +6,9 @@ package project2.Controllers;
 
 import org.newdawn.slick.SlickException;
 import project2.Elements.BasicObject;
-import project2.Elements.BasicTerrain;
+import project2.Elements.Characters.Player.Player;
+import project2.Elements.Environment.BasicTerrain;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class Loader {
@@ -21,9 +18,13 @@ public class Loader {
 
 
 	public enum Tag {
-		PLAYER
+		PLAYER, MOVEABLE, ENEMY
 	}
 
+
+	public enum Directions {
+		LEFT, RIGHT, UP, DOWN
+	}
 
 
 	// loading the required level
@@ -54,10 +55,10 @@ public class Loader {
 					map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.TARGET, row, column, world);
 					break;
 				case "stone":
-					map[column][row].occupy(new BasicObject(BasicObject.ObjectType.STONE, world));
+					map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.STONE, row, column, world);
 					break;
 				case "player":
-					map[column][row].occupy(new BasicObject(BasicObject.ObjectType.PLAYER_LEFT, world));
+					map[column][row].occupy(new Player(world));
 					break;
 				default:
 					map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.EMPTY, row, column, world);

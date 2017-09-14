@@ -29,7 +29,7 @@ public class Game {
 
     public void update(Input input, int delta) throws SlickException {
         if (input.isKeyPressed(Input.KEY_R)) {
-            startLevel(currentLvl);
+            restartCurrentLevel();
         } else if (input.isKeyPressed(Input.KEY_Z)) {
             rewind();
         } else {
@@ -57,6 +57,10 @@ public class Game {
 
 
     /* helper functions */
+    public void restartCurrentLevel() throws SlickException {
+        startLevel(currentLvl);
+    }
+
 
 
     // go backwards
@@ -69,5 +73,6 @@ public class Game {
         numberOfMoves = 0;
         currentWorld = new World(level);
     }
+
 
 }

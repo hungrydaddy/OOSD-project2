@@ -5,7 +5,6 @@
 package project2.Elements;
 
 
-import org.lwjgl.input.Controllers;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -13,70 +12,39 @@ import org.newdawn.slick.SlickException;
 import project2.Controllers.App;
 import project2.Controllers.Loader;
 import project2.Controllers.World;
+import project2.Elements.Environment.BasicTerrain;
 
 import java.util.ArrayList;
 
 
-public class BasicObject {
+abstract public class BasicObject {
 
     private World world;
     private Image objectTile;
-    private Boolean moveable;
+    private Boolean canGoThrough;
     private BasicTerrain occupiedTerrain;
-    private ObjectType objectType;
+    private BasicObject stackedObject;
     private ArrayList<Loader.Tag> tags;
 
 
-
-    public enum ObjectType {
-        STONE, PLAYER_LEFT
-    }
-
-    public BasicObject(ObjectType object, World world) throws SlickException {
+    public BasicObject(World world) {
         this.world = world;
-        this.objectType = object;
-
         this.tags = new ArrayList<>();
-
-        switch (object) {
-            case STONE:
-                moveable = true;
-                objectTile = new Image("res/stone.png");
-                break;
-            case PLAYER_LEFT:
-                moveable = true;
-                objectTile = new Image("res/player_left.png");
-                tags.add(Loader.Tag.PLAYER);
-                break;
-        }
     }
 
 
-    // key listener
-    public void update(Input input, int delta) {
-        if (world == null) {
-            return;
-        }
 
 
-        if (input.isKeyPressed(Input.KEY_UP)) {
-            this.move(World.Directions.UP);
-        } else if (input.isKeyPressed(Input.KEY_DOWN)) {
-            this.move(World.Directions.DOWN);
-        } else if (input.isKeyPressed(Input.KEY_LEFT)) {
-            this.move(World.Directions.LEFT);
-        } else if (input.isKeyPressed(Input.KEY_RIGHT)) {
-            this.move(World.Directions.RIGHT);
-        }
-    }
 
+    abstract public void update(Input input, int delta);
 
 
     public void render(Graphics g) {
-        if (objectTile != null) {
+        if (objectTile != null) { // render this tile first
             objectTile.draw(getRow() * App.TILE_SIZE + world.X_offset, getColumn() * App.TILE_SIZE + world.Y_offset);
-        } else {
-            return;
+        }
+        if (stackedObject != null) { // if something is stacked on this object, continue to render it
+            stackedObject.render(g);
         }
     }
 
@@ -86,44 +54,22 @@ public class BasicObject {
 
 
 
-    /* helper functions */
-
-
-    // moving towards different directions
-    public Boolean move(World.Directions direction) {
-        BasicTerrain destination = getTerrainOnDirection(direction);
-        BasicObject obstacle = destination.getOccupiedObject();
-
-        // if destination is empty, do not move
-        if (destination == null) {
-            return false;
+    /* internal functions */
+    public void stackOn(BasicObject object) {
+        if (stackedObject == null) {
+            stackedObject = object;
         }
-
-        // if there is an obstacle in front
-        if (obstacle != null) {
-            if (obstacle.move(direction)) {
-                // if the obstacle moved, move too
-                this.move(direction);
-            } else {
-                // if the obstacle did not move, do not move
-                return false;
-            }
-        }
-
-
-        if (this.moveable && !destination.isSolid()) {
-            this.occupiedTerrain.removeObject();
-            destination.occupy(this);
-        } else {
-            return false;
-        }
-
-        return true;
     }
+
+    abstract public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException;
+
+
+
+
 
 
     // get a terrain in a direction
-    public BasicTerrain getTerrainOnDirection(World.Directions direction) {
+    public BasicTerrain getTerrainOnDirection(Loader.Directions direction) {
         BasicTerrain targetTerrain;
 
         switch (direction) {
@@ -167,9 +113,7 @@ public class BasicObject {
 
 
 
-
-
-    // encapsulations
+    /* encapsulations */
     public Integer getColumn() {
         return this.occupiedTerrain.getColumn();
     }
@@ -178,16 +122,28 @@ public class BasicObject {
         return this.occupiedTerrain.getRow();
     }
 
-    public Boolean isMoveable() {
-        return moveable;
+    public Boolean canGoThrough() {
+        return canGoThrough;
     }
 
     public void setOccupiedTerrain(BasicTerrain target) {
         occupiedTerrain = target;
     }
 
-    public ObjectType getObjectType() {
-        return objectType;
+    public BasicObject getStackedObject() {
+        return stackedObject;
+    }
+
+    public ArrayList<Loader.Tag> getTags() {
+        return tags;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public BasicTerrain getOccupiedTerrain() {
+        return occupiedTerrain;
     }
 
     public Boolean hasTag(Loader.Tag tag) {
@@ -197,4 +153,7 @@ public class BasicObject {
         return false;
     }
 
+    public void setObjectTile(String name) throws SlickException {
+        this.objectTile = new Image("res/" + name + ".png");
+    }
 }
