@@ -26,6 +26,7 @@ public class Player extends Character{
 
 
     // key listener
+    @Override
     public void update(Input input, int delta) {
         if (getWorld() == null) {
             return;
@@ -45,7 +46,7 @@ public class Player extends Character{
 
 
 
-
+    @Override
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
         if (object.hasTag(Loader.Tag.ENEMY)) {
             getWorld().gameOver();

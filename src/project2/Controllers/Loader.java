@@ -18,7 +18,8 @@ public class Loader {
 
 
 	public enum Tag {
-		PLAYER, MOVEABLE, ENEMY
+		PLAYER, MOVEABLE, ENEMY,
+		FLOOR
 	}
 
 
