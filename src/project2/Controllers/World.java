@@ -37,7 +37,7 @@ public class World {
 		ArrayList<String> lvlInfo = loadLevelFile(level);
 		setupOffsets(lvlInfo.get(0));
 
-		map = Loader.parseLevel(lvlInfo, this);
+		Loader.parseLevel(lvlInfo, this);
 	}
 
 

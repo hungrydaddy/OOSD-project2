@@ -20,8 +20,10 @@ abstract public class Character extends BasicObject {
 
 
     // moving towards different directions
-    public Boolean move(Loader.Directions direction) {
-        // TODO
+    public Boolean move(Loader.Directions direction) throws SlickException {
+
+        BasicCell destination = getCellOnDirection(direction);
+        destination.getObject().onCollide(this, direction);
         return true;
     }
 

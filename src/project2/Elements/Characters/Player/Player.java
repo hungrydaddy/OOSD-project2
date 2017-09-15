@@ -21,10 +21,8 @@ public class Player extends Character{
 
     // key listener
     @Override
-    public void update(Input input, int delta) {
-        if (getWorld() == null) {
-            return;
-        }
+    public void update(Input input, int delta) throws SlickException {
+
 
         // key detection
         if (input.isKeyPressed(Input.KEY_UP)) {

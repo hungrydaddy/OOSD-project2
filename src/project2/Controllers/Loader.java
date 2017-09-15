@@ -34,7 +34,7 @@ public class Loader {
 
 
 	// loading the required level
-	public static BasicCell[][] parseLevel(ArrayList<String> lvlInfo, World world) throws SlickException {
+	public static void parseLevel(ArrayList<String> lvlInfo, World world) throws SlickException {
 
 		BasicCell[][] map = new BasicCell[world.height][world.width];
 
@@ -70,11 +70,13 @@ public class Loader {
 				case "stone":
 					BasicObject block = new Block(world);
 					block.setCell(map[column][row]);
+					block.setParent(map[column][row].getObject());
 					map[column][row].getObject().stackOn(block);
 					break;
 				case "player":
 					BasicObject player = new Player(world);
 					player.setCell(map[column][row]);
+					player.setParent(map[column][row].getObject());
 					map[column][row].getObject().stackOn(player);
 					world.setPlayer(player);
 					break;
@@ -83,7 +85,7 @@ public class Loader {
 			}
 		}
 
-		return map;
+		world.map = map;
 	}
 
 

@@ -22,7 +22,8 @@ abstract public class BasicObject {
     private Image objectTile;
     private Boolean canGoThrough;
     private BasicCell cell;
-    private BasicObject stackedObject;
+    private BasicObject parent;
+    private BasicObject child;
     private ArrayList<Loader.Tag> tags;
 
 
@@ -35,15 +36,15 @@ abstract public class BasicObject {
 
 
 
-    abstract public void update(Input input, int delta);
+    abstract public void update(Input input, int delta) throws SlickException;
 
 
     public void render(Graphics g) {
         if (objectTile != null) { // render this tile first
             objectTile.draw(getRow() * App.TILE_SIZE + world.X_offset, getColumn() * App.TILE_SIZE + world.Y_offset);
         }
-        if (stackedObject != null) { // if something is stacked on this object, continue to render it
-            stackedObject.render(g);
+        if (child != null) { // if something is stacked on this object, continue to render it
+            child.render(g);
         }
     }
 
@@ -54,16 +55,18 @@ abstract public class BasicObject {
 
 
     /* internal functions */
-    public void stackOn(BasicObject object) {
-        if (getStackedObject() == null) {
-            stackedObject = object;
+    public void stackOn(BasicObject object) throws SlickException {
+        if (getChild() == null) {
+            object.getParent().setChild(null);
+            object.setParent(this);
+            object.setCell(cell);
+            this.setChild(object);
         }
     }
 
 
     abstract public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException;
 
-    //abstract public void onSplit(BasicObject object, Loader.Directions direction) throws SlickException;
 
 
 
@@ -130,8 +133,20 @@ abstract public class BasicObject {
         this.cell = cell;
     }
 
-    public BasicObject getStackedObject() {
-        return stackedObject;
+    public BasicObject getChild() {
+        return child;
+    }
+
+    public void setChild(BasicObject child) {
+        this.child = child;
+    }
+
+    public BasicObject getParent() {
+        return parent;
+    }
+
+    public void setParent(BasicObject parent) {
+        this.parent = parent;
     }
 
     public ArrayList<Loader.Tag> getTags() {

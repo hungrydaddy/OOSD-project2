@@ -20,7 +20,7 @@ public class Target extends Floor {
     @Override
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
 
-        if (getStackedObject() == null) {
+        if (getChild() == null) {
             stackOn(object);
             if (object.hasTag(Loader.Tag.BLOCK)) {
                 hasBlock = true;

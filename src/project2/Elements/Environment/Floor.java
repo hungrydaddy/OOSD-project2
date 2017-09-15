@@ -1,5 +1,6 @@
 package project2.Elements.Environment;
 
+import org.lwjgl.Sys;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Loader;
@@ -26,10 +27,12 @@ public class Floor extends BasicObject {
 
     @Override
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
+        /*
         if (getStackedObject() == null) { // if nothing stacked on, collide now
             stackOn(object);
         } else { // if something is stacked on, collide with that one
             getStackedObject().onCollide(object, direction);
-        }
+        }*/
+        stackOn(object);
     }
 }
