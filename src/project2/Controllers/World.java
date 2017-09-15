@@ -45,8 +45,8 @@ public class World {
 
 
 
-	public void update(Input input, int delta) throws SlickException {
-		player.update(input, delta);
+	public void update(Loader.Directions direction) throws SlickException {
+		player.update(direction);
 	}
 
 
@@ -97,13 +97,14 @@ public class World {
 
 
 
-	public void gameOver() throws SlickException {
-		// put some fancy stuff on the screen
-		game.restartCurrentLevel();
+	public Boolean levelWon() {
+		for (int i = 0;i < targets.size();i++) {
+			if (!targets.get(i).hasBlock()) { // if any of the targets does not have a block
+				return false;
+			}
+		}
+		return true;
 	}
-
-
-
 
 
 

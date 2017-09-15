@@ -17,12 +17,10 @@ public class Floor extends BasicObject {
         setObjectTile("floor");
     }
 
-
-
     @Override
-    public void update(Input input, int delta) {
-        // nothing to update
+    public void update(Loader.Directions direction) throws SlickException {
     }
+
 
 
     @Override

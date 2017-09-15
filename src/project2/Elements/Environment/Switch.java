@@ -14,9 +14,6 @@ public class Switch extends Target {
         setObjectTile("switch");
     }
 
-    @Override
-    public void update(Input input, int delta) {
-    }
 
 
     @Override

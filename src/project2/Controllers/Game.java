@@ -30,11 +30,32 @@ public class Game {
     public void update(Input input, int delta) throws SlickException {
         if (input.isKeyPressed(Input.KEY_R)) {
             restartCurrentLevel();
-        } else if (input.isKeyPressed(Input.KEY_Z)) {
+        }
+        if (input.isKeyPressed(Input.KEY_Z)) {
             rewind();
-        } else {
-            currentWorld.update(input, delta);
-            // after updating, take a snapshot
+        }
+
+        Boolean validMove = false;
+        if (input.isKeyPressed(Input.KEY_UP)) {
+            currentWorld.update(Loader.Directions.UP);
+            validMove = true;
+        } else if (input.isKeyPressed(Input.KEY_DOWN)) {
+            currentWorld.update(Loader.Directions.DOWN);
+            validMove = true;
+        } else if (input.isKeyPressed(Input.KEY_LEFT)) {
+            currentWorld.update(Loader.Directions.LEFT);
+            validMove = true;
+        } else if (input.isKeyPressed(Input.KEY_RIGHT)) {
+            currentWorld.update(Loader.Directions.RIGHT);
+            validMove = true;
+        }
+
+        if (validMove) {
+            numberOfMoves++;
+            // take a snapshot and save it
+            if (currentWorld.levelWon() == true) {
+                startLevel(currentLvl++);
+            }
         }
     }
 

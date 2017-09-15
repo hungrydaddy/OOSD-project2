@@ -36,7 +36,7 @@ abstract public class BasicObject {
 
 
 
-    abstract public void update(Input input, int delta) throws SlickException;
+    abstract public void update(Loader.Directions direction) throws SlickException;
 
 
     public void render(Graphics g) {

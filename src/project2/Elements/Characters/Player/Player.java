@@ -21,19 +21,8 @@ public class Player extends Character{
 
     // key listener
     @Override
-    public void update(Input input, int delta) throws SlickException {
-
-
-        // key detection
-        if (input.isKeyPressed(Input.KEY_UP)) {
-            this.move(Loader.Directions.UP);
-        } else if (input.isKeyPressed(Input.KEY_DOWN)) {
-            this.move(Loader.Directions.DOWN);
-        } else if (input.isKeyPressed(Input.KEY_LEFT)) {
-            this.move(Loader.Directions.LEFT);
-        } else if (input.isKeyPressed(Input.KEY_RIGHT)) {
-            this.move(Loader.Directions.RIGHT);
-        }
+    public void update(Loader.Directions direction) throws SlickException {
+        this.move(direction);
     }
 
 
@@ -41,7 +30,7 @@ public class Player extends Character{
     @Override
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
         if (object.hasTag(Loader.Tag.ENEMY)) {
-            getWorld().gameOver();
+            // restart the game
         }
     }
 

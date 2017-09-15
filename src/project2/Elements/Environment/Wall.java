@@ -15,9 +15,10 @@ public class Wall extends BasicObject {
     }
 
     @Override
-    public void update(Input input, int delta) {
+    public void update(Loader.Directions direction) throws SlickException {
 
     }
+
 
     @Override
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
