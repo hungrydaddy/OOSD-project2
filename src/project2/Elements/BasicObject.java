@@ -12,7 +12,6 @@ import org.newdawn.slick.SlickException;
 import project2.Controllers.App;
 import project2.Controllers.Loader;
 import project2.Controllers.World;
-import project2.Elements.Environment.BasicTerrain;
 
 import java.util.ArrayList;
 
@@ -22,7 +21,7 @@ abstract public class BasicObject {
     private World world;
     private Image objectTile;
     private Boolean canGoThrough;
-    private BasicTerrain occupiedTerrain;
+    private BasicCell cell;
     private BasicObject stackedObject;
     private ArrayList<Loader.Tag> tags;
 
@@ -56,57 +55,58 @@ abstract public class BasicObject {
 
     /* internal functions */
     public void stackOn(BasicObject object) {
-        if (stackedObject == null) {
+        if (getStackedObject() == null) {
             stackedObject = object;
         }
     }
 
+
     abstract public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException;
 
-
+    //abstract public void onSplit(BasicObject object, Loader.Directions direction) throws SlickException;
 
 
 
 
     // get a terrain in a direction
-    public BasicTerrain getTerrainOnDirection(Loader.Directions direction) {
-        BasicTerrain targetTerrain;
+    public BasicCell getCellOnDirection(Loader.Directions direction) {
+        BasicCell targetCell;
 
         switch (direction) {
             case UP:
                 if (getColumn() - 1 < 0) {
-                    targetTerrain = null;
+                    targetCell = null;
                 } else {
-                    targetTerrain = world.map[getColumn() - 1][getRow()];
+                    targetCell = world.map[getColumn() - 1][getRow()];
                 }
                 break;
             case DOWN:
                 if (getColumn() + 1 >= world.height) {
-                    targetTerrain = null;
+                    targetCell = null;
                 } else {
-                    targetTerrain = world.map[getColumn() + 1][getRow()];
+                    targetCell = world.map[getColumn() + 1][getRow()];
                 }
                 break;
             case RIGHT:
                 if (getRow() + 1 >= world.width) {
-                    targetTerrain = null;
+                    targetCell = null;
                 } else {
-                    targetTerrain = world.map[getColumn()][getRow() + 1];
+                    targetCell = world.map[getColumn()][getRow() + 1];
                 }
                 break;
             case LEFT:
                 if (getRow() - 1 < 0) {
-                    targetTerrain = null;
+                    targetCell = null;
                 } else {
-                    targetTerrain = world.map[getColumn()][getRow() - 1];
+                    targetCell = world.map[getColumn()][getRow() - 1];
                 }
                 break;
             default:
-                targetTerrain = null;
+                targetCell = null;
                 break;
         }
 
-        return targetTerrain;
+        return targetCell;
     }
 
 
@@ -115,19 +115,19 @@ abstract public class BasicObject {
 
     /* encapsulations */
     public Integer getColumn() {
-        return this.occupiedTerrain.getColumn();
+        return this.cell.getColumn();
     }
 
     public Integer getRow() {
-        return this.occupiedTerrain.getRow();
+        return this.cell.getRow();
     }
 
     public Boolean canGoThrough() {
         return canGoThrough;
     }
 
-    public void setOccupiedTerrain(BasicTerrain target) {
-        occupiedTerrain = target;
+    public void setCell(BasicCell cell) {
+        this.cell = cell;
     }
 
     public BasicObject getStackedObject() {
@@ -142,8 +142,8 @@ abstract public class BasicObject {
         return world;
     }
 
-    public BasicTerrain getOccupiedTerrain() {
-        return occupiedTerrain;
+    public BasicCell getCell() {
+        return cell;
     }
 
     public Boolean hasTag(Loader.Tag tag) {

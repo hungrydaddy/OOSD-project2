@@ -10,20 +10,26 @@ public class Floor extends BasicObject {
 
 
 
-    public Floor(World world) {
+    public Floor(World world) throws SlickException {
         super(world);
         getTags().add(Loader.Tag.FLOOR);
+        setObjectTile("floor");
     }
 
 
 
     @Override
     public void update(Input input, int delta) {
-
+        // nothing to update
     }
+
 
     @Override
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
-
+        if (getStackedObject() == null) { // if nothing stacked on, collide now
+            stackOn(object);
+        } else { // if something is stacked on, collide with that one
+            getStackedObject().onCollide(object, direction);
+        }
     }
 }

@@ -7,8 +7,8 @@ package project2.Controllers;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import project2.Elements.BasicCell;
 import project2.Elements.BasicObject;
-import project2.Elements.Environment.BasicTerrain;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class World {
 
 	// map info
-	public BasicTerrain[][] map;
+	public BasicCell[][] map;
 	public Integer X_offset;
 	public Integer Y_offset;
 	public Integer height;
@@ -38,8 +38,6 @@ public class World {
 		setupOffsets(lvlInfo.get(0));
 
 		map = Loader.parseLevel(lvlInfo, this);
-		// find the player
-		player = Loader.findObjectByTag(Loader.Tag.PLAYER, this);
 	}
 
 
@@ -53,11 +51,9 @@ public class World {
 
 	public void render(Graphics g) throws SlickException {
 		// iterate thru the map to render every object and terrain
-		for (int i = 0;i < map.length;i++) {
-			for (int j = 0;j < map[i].length;j++) {
-				if (map[i][j] != null) {
-					map[i][j].render(g);
-				}
+		for (int i = 0;i < height;i++) {
+			for (int j = 0;j < width;j++) {
+				map[i][j].render(g);
 			}
 		}
 	}
@@ -105,4 +101,12 @@ public class World {
 	}
 
 
+
+
+
+
+
+	public void setPlayer(BasicObject player) {
+		this.player = player;
+	}
 }

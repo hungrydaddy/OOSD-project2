@@ -5,9 +5,13 @@
 package project2.Controllers;
 
 import org.newdawn.slick.SlickException;
+import project2.Elements.BasicCell;
 import project2.Elements.BasicObject;
 import project2.Elements.Characters.Player.Player;
-import project2.Elements.Environment.BasicTerrain;
+import project2.Elements.Environment.Blocks.Block;
+import project2.Elements.Environment.Floor;
+import project2.Elements.Environment.Target;
+import project2.Elements.Environment.Wall;
 
 import java.util.ArrayList;
 
@@ -19,7 +23,8 @@ public class Loader {
 
 	public enum Tag {
 		PLAYER, MOVEABLE, ENEMY,
-		FLOOR
+		FLOOR, TARGET, SWITCH, DOOR, WALL, CRACKED,
+		BLOCK, ICE, TNT,
 	}
 
 
@@ -29,13 +34,20 @@ public class Loader {
 
 
 	// loading the required level
-	public static BasicTerrain[][] parseLevel(ArrayList<String> lvlInfo, World world) throws SlickException {
+	public static BasicCell[][] parseLevel(ArrayList<String> lvlInfo, World world) throws SlickException {
 
-		BasicTerrain[][] map = new BasicTerrain[world.height][world.width];
+		BasicCell[][] map = new BasicCell[world.height][world.width];
+
+		// initialise all the cells
+		for (int i = 0;i < world.height; i++) {
+			for (int j = 0;j < world.width; j++) {
+				map[i][j] = new BasicCell(j, i, world);
+			}
+		}
+
 
 		// remove the first line - map size info
 		lvlInfo.remove(0);
-
 		// iterate to parse the map
 		for (int i = 0;i < lvlInfo.size();i++) {
 			String[] temp = lvlInfo.get(i).split(",");
@@ -47,22 +59,26 @@ public class Loader {
 			// applying different rules to objects and terrains
 			switch (temp[0]) {
 				case "floor":
-					map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.FLOOR, row, column, world);
+					map[column][row].setObject(new Floor(world));
 					break;
 				case "wall":
-					map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.WALL, row, column, world);
+					map[column][row].setObject(new Wall(world));
 					break;
 				case "target":
-					map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.TARGET, row, column, world);
+					map[column][row].setObject(new Target(world));
 					break;
 				case "stone":
-					map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.STONE, row, column, world);
+					BasicObject block = new Block(world);
+					block.setCell(map[column][row]);
+					map[column][row].getObject().stackOn(block);
 					break;
 				case "player":
-					map[column][row].occupy(new Player(world));
+					BasicObject player = new Player(world);
+					player.setCell(map[column][row]);
+					map[column][row].getObject().stackOn(player);
+					world.setPlayer(player);
 					break;
 				default:
-					map[column][row] = new BasicTerrain(BasicTerrain.TerrainType.EMPTY, row, column, world);
 					break;
 			}
 		}
@@ -82,25 +98,5 @@ public class Loader {
 		return extract;
 	}
 
-
-	// get the object by its tag
-	public static BasicObject findObjectByTag(Tag tag, World world) {
-		BasicObject object = null;
-
-		// iterate thru the map to find the object
-		for (int i = 0;i < world.map.length;i++) {
-			for (int j = 0;j < world.map[i].length;j++) {
-				BasicTerrain target = world.map[i][j];
-				if (target.getOccupiedObject() != null) {
-					// if the object has the tag, return it
-					if (target.getOccupiedObject().hasTag(Tag.PLAYER)) {
-						return target.getOccupiedObject();
-					}
-				}
-			}
-		}
-
-		return object;
-	}
 
 }

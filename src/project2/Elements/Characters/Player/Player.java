@@ -1,17 +1,11 @@
 package project2.Elements.Characters.Player;
 
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import project2.Controllers.App;
 import project2.Controllers.Loader;
 import project2.Controllers.World;
 import project2.Elements.BasicObject;
 import project2.Elements.Characters.Character;
-import project2.Elements.Environment.BasicTerrain;
-
-import java.util.ArrayList;
 
 public class Player extends Character{
 
