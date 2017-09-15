@@ -20,9 +20,9 @@ public class Game {
 
     public Game() throws SlickException {
         // initialising the game, starting from lvl 0
-        currentLvl = 0;
+        currentLvl = 2;
         numberOfMoves = 0;
-        currentWorld = new World(currentLvl);
+        currentWorld = new World(currentLvl, this);
         worldSnapshots = new ArrayList<>();
     }
 
@@ -50,12 +50,28 @@ public class Game {
             validMove = true;
         }
 
+
         if (validMove) {
             numberOfMoves++;
-            // take a snapshot and save it
-            if (currentWorld.levelWon() == true) {
-                startLevel(currentLvl++);
+            // check if the game was won
+
+            // door toggle
+            if (currentWorld.getSwitch() != null) {
+                if (currentWorld.getSwitch().hasBlock()) {
+                    currentWorld.getDoor().doorHide();
+                } else {
+                    currentWorld.getDoor().doorShow();
+                }
             }
+
+            if (currentWorld.levelWon() == true) {
+                if (currentLvl == 5) {
+                    // won
+                } else {
+                    startLevel(++currentLvl);
+                }
+            }
+
         }
     }
 
@@ -90,8 +106,8 @@ public class Game {
     // purge everything and restart
     private void startLevel(int level) throws SlickException {
         worldSnapshots.clear();
+        currentWorld = new World(level, this);
         numberOfMoves = 0;
-        currentWorld = new World(level);
     }
 
 

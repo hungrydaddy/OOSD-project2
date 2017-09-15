@@ -18,6 +18,6 @@ public class Switch extends Target {
 
     @Override
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
-
+        super.onCollide(object, direction);
     }
 }

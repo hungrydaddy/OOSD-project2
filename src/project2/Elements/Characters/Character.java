@@ -19,9 +19,9 @@ abstract public class Character extends BasicObject {
     /* helper functions */
 
 
-
+    @Override
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
-        // TODO: move
+        move(direction);
     }
 
 }

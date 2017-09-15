@@ -7,11 +7,14 @@ package project2.Controllers;
 import org.newdawn.slick.SlickException;
 import project2.Elements.BasicCell;
 import project2.Elements.BasicObject;
+import project2.Elements.Characters.Enemies.Mage;
+import project2.Elements.Characters.Enemies.Rogue;
+import project2.Elements.Characters.Enemies.Skeleton;
 import project2.Elements.Characters.Player.Player;
+import project2.Elements.Environment.*;
 import project2.Elements.Environment.Blocks.Block;
-import project2.Elements.Environment.Floor;
-import project2.Elements.Environment.Target;
-import project2.Elements.Environment.Wall;
+import project2.Elements.Environment.Blocks.Ice;
+import project2.Elements.Environment.Blocks.TNT;
 
 import java.util.ArrayList;
 
@@ -23,8 +26,9 @@ public class Loader {
 
 	public enum Tag {
 		PLAYER, MOVEABLE, ENEMY,
+		SKELETON, ROGUE, MAGE,
 		FLOOR, TARGET, SWITCH, DOOR, WALL, CRACKED,
-		BLOCK, ICE, TNT,
+		BLOCK, ICE, TNT
 	}
 
 
@@ -69,11 +73,61 @@ public class Loader {
 					world.addTarget(newTarget);
 					map[column][row].setObject(newTarget);
 					break;
+				case "cracked":
+					CrackedWall cracked = new CrackedWall(world);
+					cracked.setCell(map[column][row]);
+					cracked.setParent(map[column][row].getObject());
+					map[column][row].getObject().stackOn(cracked);
+					break;
+				case "switch":
+					Switch mSwitch = new Switch(world);
+					mSwitch.setCell(map[column][row]);
+					mSwitch.setParent(map[column][row].getObject());
+					map[column][row].getObject().stackOn(mSwitch);
+					world.setSwitch(mSwitch);
+					break;
+				case "door":
+					Door door = new Door(world);
+					door.setCell(map[column][row]);
+					door.setParent(map[column][row].getObject());
+					map[column][row].getObject().stackOn(door);
+					world.setDoor(door);
+					break;
 				case "stone":
 					Block block = new Block(world);
 					block.setCell(map[column][row]);
 					block.setParent(map[column][row].getObject());
 					map[column][row].getObject().stackOn(block);
+					break;
+				case "ice":
+					Ice ice = new Ice(world);
+					ice.setCell(map[column][row]);
+					ice.setParent(map[column][row].getObject());
+					map[column][row].getObject().stackOn(ice);
+					break;
+				case "tnt":
+					TNT tnt = new TNT(world);
+					tnt.setCell(map[column][row]);
+					tnt.setParent(map[column][row].getObject());
+					map[column][row].getObject().stackOn(tnt);
+					break;
+				case "skeleton":
+					Skeleton skeleton = new Skeleton(world);
+					skeleton.setCell(map[column][row]);
+					skeleton.setParent(map[column][row].getObject());
+					map[column][row].getObject().stackOn(skeleton);
+					break;
+				case "rogue":
+					Rogue rogue = new Rogue(world);
+					rogue.setCell(map[column][row]);
+					rogue.setParent(map[column][row].getObject());
+					map[column][row].getObject().stackOn(rogue);
+					break;
+				case "mage":
+					Mage mage = new Mage(world);
+					mage.setCell(map[column][row]);
+					mage.setParent(map[column][row].getObject());
+					map[column][row].getObject().stackOn(mage);
 					break;
 				case "player":
 					Player player = new Player(world);

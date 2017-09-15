@@ -9,6 +9,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import project2.Elements.BasicCell;
 import project2.Elements.Characters.Player.Player;
+import project2.Elements.Environment.Door;
+import project2.Elements.Environment.Switch;
 import project2.Elements.Environment.Target;
 
 import java.io.BufferedReader;
@@ -32,10 +34,13 @@ public class World {
 	// objects under user control
 	private Player player;
 	private ArrayList<Target> targets = new ArrayList<>();
+	private Door door;
+	private Switch mSwitch;
 
 
 
-	public World(int level) throws SlickException {
+	public World(int level, Game game) throws SlickException {
+		this.game = game;
 		ArrayList<String> lvlInfo = loadLevelFile(level);
 		setupOffsets(lvlInfo.get(0));
 
@@ -107,10 +112,29 @@ public class World {
 	}
 
 
-
+	public Game getGame() {
+		return game;
+	}
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+
+
+	public Door getDoor() {
+		return door;
+	}
+
+	public void setDoor(Door door) {
+		this.door = door;
+	}
+
+	public Switch getSwitch() {
+		return mSwitch;
+	}
+
+	public void setSwitch(Switch mSwitch) {
+		this.mSwitch = mSwitch;
 	}
 
 	public void addTarget(Target target) {

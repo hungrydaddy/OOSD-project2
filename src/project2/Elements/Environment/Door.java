@@ -23,4 +23,30 @@ public class Door extends BasicObject {
     @Override
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
     }
+
+
+
+
+
+
+
+
+
+    // detach the door
+    public void doorHide() {
+        if (getParent() != null) {
+            getParent().setChild(null);
+            this.setParent(null);
+        }
+    }
+
+
+    // attach the door
+    public void doorShow() {
+        if (getParent() == null) {
+            this.setParent(getCell().getObject());
+            getParent().setChild(this);
+        }
+    }
+
 }
