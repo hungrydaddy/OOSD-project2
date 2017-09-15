@@ -33,7 +33,6 @@ public class Game {
         } else if (input.isKeyPressed(Input.KEY_Z)) {
             rewind();
         } else {
-            // a valid move for player
             currentWorld.update(input, delta);
             // after updating, take a snapshot
         }

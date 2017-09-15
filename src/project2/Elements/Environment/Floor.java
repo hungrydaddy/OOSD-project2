@@ -27,12 +27,16 @@ public class Floor extends BasicObject {
 
     @Override
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
-        /*
-        if (getStackedObject() == null) { // if nothing stacked on, collide now
+
+        // first collide with the child
+        if (getChild() != null) {
+            getChild().onCollide(object, direction);
+        }
+
+        // then stack up this object
+        if (getChild() == null) {
             stackOn(object);
-        } else { // if something is stacked on, collide with that one
-            getStackedObject().onCollide(object, direction);
-        }*/
-        stackOn(object);
+        }
+
     }
 }

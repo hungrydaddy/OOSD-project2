@@ -19,14 +19,6 @@ abstract public class Character extends BasicObject {
     /* helper functions */
 
 
-    // moving towards different directions
-    public Boolean move(Loader.Directions direction) throws SlickException {
-
-        BasicCell destination = getCellOnDirection(direction);
-        destination.getObject().onCollide(this, direction);
-        return true;
-    }
-
 
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
         // TODO: move

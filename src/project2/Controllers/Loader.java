@@ -65,16 +65,18 @@ public class Loader {
 					map[column][row].setObject(new Wall(world));
 					break;
 				case "target":
-					map[column][row].setObject(new Target(world));
+					Target newTarget = new Target(world);
+					world.addTarget(newTarget);
+					map[column][row].setObject(newTarget);
 					break;
 				case "stone":
-					BasicObject block = new Block(world);
+					Block block = new Block(world);
 					block.setCell(map[column][row]);
 					block.setParent(map[column][row].getObject());
 					map[column][row].getObject().stackOn(block);
 					break;
 				case "player":
-					BasicObject player = new Player(world);
+					Player player = new Player(world);
 					player.setCell(map[column][row]);
 					player.setParent(map[column][row].getObject());
 					map[column][row].getObject().stackOn(player);

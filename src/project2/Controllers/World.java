@@ -8,7 +8,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import project2.Elements.BasicCell;
-import project2.Elements.BasicObject;
+import project2.Elements.Characters.Player.Player;
+import project2.Elements.Environment.Target;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -29,7 +30,8 @@ public class World {
 
 
 	// objects under user control
-	private BasicObject player;
+	private Player player;
+	private ArrayList<Target> targets = new ArrayList<>();
 
 
 
@@ -106,7 +108,13 @@ public class World {
 
 
 
-	public void setPlayer(BasicObject player) {
+	public void setPlayer(Player player) {
 		this.player = player;
 	}
+
+	public void addTarget(Target target) {
+		this.targets.add(target);
+	}
+
+
 }

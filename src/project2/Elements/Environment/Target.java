@@ -8,7 +8,6 @@ import project2.Elements.BasicObject;
 
 public class Target extends Floor {
 
-    private Boolean hasBlock;
 
     public Target(World world) throws SlickException {
         super(world);
@@ -19,16 +18,24 @@ public class Target extends Floor {
 
     @Override
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
-
-        if (getChild() == null) {
-            stackOn(object);
-            if (object.hasTag(Loader.Tag.BLOCK)) {
-                hasBlock = true;
-            }
-        } else {
-            // if something stacked, do this
-        }
-
+        super.onCollide(object, direction);
     }
 
+
+
+
+
+
+
+
+
+
+    public Boolean hasBlock() {
+        if (getChild() == null) {
+            return false;
+        } else if (getChild().hasTag(Loader.Tag.BLOCK)) {
+            return true;
+        }
+        return false;
+    }
 }

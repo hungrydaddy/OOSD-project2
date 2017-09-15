@@ -21,6 +21,6 @@ public class Block extends BasicObject {
 
     @Override
     public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
-
+        move(direction);
     }
 }

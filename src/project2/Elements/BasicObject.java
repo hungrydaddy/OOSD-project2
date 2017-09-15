@@ -65,6 +65,15 @@ abstract public class BasicObject {
     }
 
 
+
+    // moving towards different directions
+    public Boolean move(Loader.Directions direction) throws SlickException {
+        BasicCell destination = getCellOnDirection(direction);
+        destination.getObject().onCollide(this, direction);
+        return true;
+    }
+
+
     abstract public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException;
 
 
