@@ -21,6 +21,6 @@ public class Wall extends BasicObject {
 
     @Override
     public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException {
-        return true;
+        return false;
     }
 }

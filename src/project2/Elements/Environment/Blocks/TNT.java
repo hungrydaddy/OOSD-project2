@@ -15,7 +15,7 @@ public class TNT extends Block {
 
     private Image explosionTile;
     private Boolean isExploding = false;
-    private final int explosionTime = 400;
+    private final int EXPLOSION_TIME = 400;
 
     public TNT(World world) throws SlickException {
         super(world);
@@ -49,7 +49,7 @@ public class TNT extends Block {
                 isExploding = false;
                 getWorld().lateRenderClear();
             }
-        }, explosionTime);
+        }, EXPLOSION_TIME);
 
     }
 

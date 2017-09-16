@@ -19,7 +19,6 @@ abstract public class BasicObject {
 
     private World world;
     private Image objectTile;
-    private Boolean canGoThrough;
     private BasicCell cell;
     private BasicObject parent;
     private BasicObject child;
@@ -54,6 +53,7 @@ abstract public class BasicObject {
 
 
     /* internal functions */
+
     public void stack(BasicObject object) throws SlickException {
         if (getChild() == null) {
             object.unstack();
@@ -75,8 +75,10 @@ abstract public class BasicObject {
     // moving towards different directions
     public Boolean move(Loader.Directions direction) throws SlickException {
         BasicCell destination = getCellOnDirection(direction);
-        destination.getObject().contact(this, direction);
-        return true;
+        if (destination.getObject().contact(this, direction)) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -86,7 +88,7 @@ abstract public class BasicObject {
 
 
 
-    // get a terrain in a direction
+    // get a cell in a direction
     public BasicCell getCellOnDirection(Loader.Directions direction) {
         BasicCell targetCell;
 
@@ -99,14 +101,14 @@ abstract public class BasicObject {
                 }
                 break;
             case DOWN:
-                if (getColumn() + 1 >= world.height) {
+                if (getColumn() + 1 >= world.getHeight()) {
                     targetCell = null;
                 } else {
                     targetCell = world.map[getColumn() + 1][getRow()];
                 }
                 break;
             case RIGHT:
-                if (getRow() + 1 >= world.width) {
+                if (getRow() + 1 >= world.getWidth()) {
                     targetCell = null;
                 } else {
                     targetCell = world.map[getColumn()][getRow() + 1];
@@ -130,18 +132,41 @@ abstract public class BasicObject {
 
 
 
+    public Boolean childrenHaveTag(Loader.Tag tag) {
+        if (hasTag(tag)) {
+            return true;
+        } else if (getChild() != null) {
+            return getChild().childrenHaveTag(tag);
+        }
+        return false;
+    }
+
+
+
+    // destroy this object
+    public void objectDestroy() {
+        if (child != null) {
+            child.objectDestroy();
+            child = null;
+        }
+        world = null;
+        cell = null;
+        parent = null;
+        objectTile = null;
+        tags.clear();
+        tags = null;
+    }
+
+
+
 
     /* encapsulations */
     public Integer getColumn() {
-        return this.cell.getColumn();
+        return getCell().getColumn();
     }
 
     public Integer getRow() {
-        return this.cell.getRow();
-    }
-
-    public Boolean canGoThrough() {
-        return canGoThrough;
+        return getCell().getRow();
     }
 
     public void setCell(BasicCell cell) {

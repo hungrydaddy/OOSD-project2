@@ -20,7 +20,7 @@ public class Game {
 
     public Game() throws SlickException {
         // initialising the game, starting from lvl 0
-        currentLvl = 1;
+        currentLvl = 3;
         numberOfMoves = 0;
         currentWorld = new World(currentLvl, this);
         worldSnapshots = new ArrayList<>();
@@ -28,50 +28,25 @@ public class Game {
 
 
     public void update(Input input, int delta) throws SlickException {
+        currentWorld.update(input, delta);
+
+        if (currentWorld.levelWon()) {
+            if (currentLvl == 5) {
+                // won
+            } else {
+                startLevel(++currentLvl);
+            }
+        }
+
+        if (currentWorld.getPlayer().playerDead()) {
+            restartCurrentLevel();
+        }
+
         if (input.isKeyPressed(Input.KEY_R)) {
             restartCurrentLevel();
         }
         if (input.isKeyPressed(Input.KEY_Z)) {
             rewind();
-        }
-
-        Boolean validMove = false;
-        if (input.isKeyPressed(Input.KEY_UP)) {
-            currentWorld.update(Loader.Directions.UP);
-            validMove = true;
-        } else if (input.isKeyPressed(Input.KEY_DOWN)) {
-            currentWorld.update(Loader.Directions.DOWN);
-            validMove = true;
-        } else if (input.isKeyPressed(Input.KEY_LEFT)) {
-            currentWorld.update(Loader.Directions.LEFT);
-            validMove = true;
-        } else if (input.isKeyPressed(Input.KEY_RIGHT)) {
-            currentWorld.update(Loader.Directions.RIGHT);
-            validMove = true;
-        }
-
-
-        if (validMove) {
-            numberOfMoves++;
-            // check if the game was won
-
-            // door toggle
-            if (currentWorld.getSwitch() != null) {
-                if (currentWorld.getSwitch().hasBlock()) {
-                    currentWorld.getDoor().doorHide();
-                } else {
-                    currentWorld.getDoor().doorShow();
-                }
-            }
-
-            if (currentWorld.levelWon() == true) {
-                if (currentLvl == 5) {
-                    // won
-                } else {
-                    startLevel(++currentLvl);
-                }
-            }
-
         }
     }
 
@@ -103,9 +78,12 @@ public class Game {
     private void rewind() {
     }
 
+
     // purge everything and restart
     private void startLevel(int level) throws SlickException {
         worldSnapshots.clear();
+        currentWorld.worldDestroy();
+        currentWorld = null;
         currentWorld = new World(level, this);
         numberOfMoves = 0;
     }

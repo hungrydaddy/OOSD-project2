@@ -2,20 +2,19 @@ package project2.Elements;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import project2.Controllers.Loader;
 import project2.Controllers.World;
 
 public class BasicCell {
 
 
-    private World world;
     private BasicObject object;
     private Integer column;
     private Integer row;
 
 
     // constructor
-    public BasicCell(Integer row, Integer column, World world) throws SlickException {
-        this.world = world;
+    public BasicCell(Integer row, Integer column) throws SlickException {
         this.column = column;
         this.row = row;
     }
@@ -28,6 +27,15 @@ public class BasicCell {
         }
     }
 
+
+
+    // destroy this cell
+    public void cellDestroy() {
+        if (getObject() != null) {
+            getObject().objectDestroy();
+            object = null;
+        }
+    }
 
 
 

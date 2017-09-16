@@ -16,8 +16,8 @@ abstract public class Enemy extends Character {
 
     @Override
     public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException {
-        if (object.hasTag(Loader.Tag.PLAYER)) { // if contacts with the player
-            getWorld().getGame().restartCurrentLevel();
+        if (object.hasTag(Loader.Tag.PLAYER)) { // if player contacted with an enemy
+            getWorld().getPlayer().playerDied();
         }
         super.contact(object, direction);
         return true;
