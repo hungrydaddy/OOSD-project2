@@ -16,27 +16,36 @@ public class Game {
     private int numberOfMoves;
     private ArrayList<String> worldSnapshots;
     private World currentWorld;
+    private Boolean update = false;
 
 
     public Game() throws SlickException {
         // initialising the game, starting from lvl 0
-        currentLvl = 3;
+        currentLvl = 4;
         numberOfMoves = 0;
         currentWorld = new World(currentLvl, this);
         worldSnapshots = new ArrayList<>();
+        update = true;
     }
 
 
     public void update(Input input, int delta) throws SlickException {
+        if (!update) {
+            return;
+        }
+
         currentWorld.update(input, delta);
 
         if (currentWorld.levelWon()) {
             if (currentLvl == 5) {
                 // won
+                return;
             } else {
                 startLevel(++currentLvl);
+                return;
             }
         }
+
 
         if (currentWorld.getPlayer().playerDead()) {
             restartCurrentLevel();
@@ -76,16 +85,21 @@ public class Game {
 
     // go backwards
     private void rewind() {
+        update = false;
+        update = true;
     }
 
 
     // purge everything and restart
     private void startLevel(int level) throws SlickException {
+        update = false;
         worldSnapshots.clear();
         currentWorld.worldDestroy();
         currentWorld = null;
         currentWorld = new World(level, this);
         numberOfMoves = 0;
+
+        update = true;
     }
 
 

@@ -52,10 +52,6 @@ public class Skeleton extends Enemy {
     public Boolean move(Loader.Directions direction) throws SlickException {
         BasicCell destination = getCellOnDirection(direction);
 
-        if (destination == null) {
-            return false;
-        }
-
         if (destination.getObject().childrenHaveTag(Loader.Tag.BLOCK)) {
             return false;
         }

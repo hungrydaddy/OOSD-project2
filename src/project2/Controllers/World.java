@@ -40,6 +40,8 @@ public class World {
 	private Player player;
 	private ArrayList<Target> targets = new ArrayList<>();
 	private ArrayList<Skeleton> skeletons = new ArrayList<>();
+	private ArrayList<Rogue> rogues = new ArrayList<>();
+	private ArrayList<Mage> mages = new ArrayList<>();
 	private Door door;
 	private Switch mSwitch;
 
@@ -59,15 +61,20 @@ public class World {
 
 	public void update(Input input, int delta) throws SlickException {
 
+		Boolean playerMoved = false;
 		// updating the player
 		if (input.isKeyPressed(Input.KEY_UP)) {
 			player.update(Loader.Directions.UP);
+			playerMoved = true;
 		} else if (input.isKeyPressed(Input.KEY_DOWN)) {
 			player.update(Loader.Directions.DOWN);
+			playerMoved = true;
 		} else if (input.isKeyPressed(Input.KEY_LEFT)) {
 			player.update(Loader.Directions.LEFT);
+			playerMoved = true;
 		} else if (input.isKeyPressed(Input.KEY_RIGHT)) {
 			player.update(Loader.Directions.RIGHT);
+			playerMoved = true;
 		}
 
 		// updating the skeletons
@@ -76,13 +83,26 @@ public class World {
 		}
 
 
-		// door toggle
-		if (getSwitch() != null) {
-			if (getSwitch().hasBlock()) {
-				getDoor().doorHide();
-			} else {
-				getDoor().doorShow();
+		if (playerMoved) {
+			// door toggle
+			if (getSwitch() != null) {
+				if (getSwitch().hasBlock()) {
+					getDoor().doorHide();
+				} else {
+					getDoor().doorShow();
+				}
 			}
+
+			// rogue update
+			for (int i = 0;i < rogues.size();i++) {
+				rogues.get(i).update(null);
+			}
+
+			// mage update
+			for (int i = 0;i < mages.size();i++) {
+				mages.get(i).update(null);
+			}
+
 		}
 
 	}
@@ -199,7 +219,7 @@ public class World {
 		// initialise all the cells
 		for (int i = 0;i < height; i++) {
 			for (int j = 0;j < width; j++) {
-				map[i][j] = new BasicCell(j, i);
+				map[i][j] = new BasicCell(i, j);
 			}
 		}
 
@@ -209,86 +229,86 @@ public class World {
 		// iterate to parse the map
 		for (int i = 0;i < lvlInfo.size();i++) {
 			String[] temp = lvlInfo.get(i).split(",");
-			Integer row = Integer.parseInt(temp[1]);
-			Integer column = Integer.parseInt(temp[2]);
-			Integer x = row * App.TILE_SIZE;
-			Integer y = column * App.TILE_SIZE;
+			Integer column = Integer.parseInt(temp[1]);
+			Integer row = Integer.parseInt(temp[2]);
 
 			// applying different rules to objects and terrains
 			switch (temp[0]) {
 				case "floor":
-					map[column][row].setObject(new Floor(this));
+					map[row][column].setObject(new Floor(this));
 					break;
 				case "wall":
-					map[column][row].setObject(new Wall(this));
+					map[row][column].setObject(new Wall(this));
 					break;
 				case "target":
 					Target newTarget = new Target(this);
 					addTarget(newTarget);
-					map[column][row].setObject(newTarget);
+					map[row][column].setObject(newTarget);
 					break;
 				case "cracked":
 					CrackedWall cracked = new CrackedWall(this);
-					cracked.setCell(map[column][row]);
-					cracked.setParent(map[column][row].getObject());
-					map[column][row].getObject().stack(cracked);
+					cracked.setCell(map[row][column]);
+					cracked.setParent(map[row][column].getObject());
+					map[row][column].getObject().stack(cracked);
 					break;
 				case "switch":
 					Switch mSwitch = new Switch(this);
-					mSwitch.setCell(map[column][row]);
-					mSwitch.setParent(map[column][row].getObject());
-					map[column][row].getObject().stack(mSwitch);
+					mSwitch.setCell(map[row][column]);
+					mSwitch.setParent(map[row][column].getObject());
+					map[row][column].getObject().stack(mSwitch);
 					setSwitch(mSwitch);
 					break;
 				case "door":
 					Door door = new Door(this);
-					door.setCell(map[column][row]);
-					door.setParent(map[column][row].getObject());
-					map[column][row].getObject().stack(door);
+					door.setCell(map[row][column]);
+					door.setParent(map[row][column].getObject());
+					map[row][column].getObject().stack(door);
 					setDoor(door);
 					break;
 				case "stone":
 					Block block = new Block(this);
-					block.setCell(map[column][row]);
-					block.setParent(map[column][row].getObject());
-					map[column][row].getObject().stack(block);
+					block.setCell(map[row][column]);
+					block.setParent(map[row][column].getObject());
+					map[row][column].getObject().stack(block);
 					break;
 				case "ice":
 					Ice ice = new Ice(this);
-					ice.setCell(map[column][row]);
-					ice.setParent(map[column][row].getObject());
-					map[column][row].getObject().stack(ice);
+					ice.setCell(map[row][column]);
+					ice.setParent(map[row][column].getObject());
+					map[row][column].getObject().stack(ice);
 					break;
 				case "tnt":
 					TNT tnt = new TNT(this);
-					tnt.setCell(map[column][row]);
-					tnt.setParent(map[column][row].getObject());
-					map[column][row].getObject().stack(tnt);
+					tnt.setCell(map[row][column]);
+					tnt.setParent(map[row][column].getObject());
+					map[row][column].getObject().stack(tnt);
 					break;
 				case "skeleton":
 					Skeleton skeleton = new Skeleton(this);
-					skeleton.setCell(map[column][row]);
-					skeleton.setParent(map[column][row].getObject());
-					map[column][row].getObject().stack(skeleton);
+					skeleton.setCell(map[row][column]);
+					skeleton.setParent(map[row][column].getObject());
+					map[row][column].getObject().stack(skeleton);
 					skeletons.add(skeleton);
 					break;
 				case "rogue":
 					Rogue rogue = new Rogue(this);
-					rogue.setCell(map[column][row]);
-					rogue.setParent(map[column][row].getObject());
-					map[column][row].getObject().stack(rogue);
+					rogue.setCell(map[row][column]);
+					rogue.setParent(map[row][column].getObject());
+					map[row][column].getObject().stack(rogue);
+					rogues.add(rogue);
 					break;
 				case "mage":
 					Mage mage = new Mage(this);
-					mage.setCell(map[column][row]);
-					mage.setParent(map[column][row].getObject());
-					map[column][row].getObject().stack(mage);
+					mage.setCell(map[row][column]);
+					mage.setParent(map[row][column].getObject());
+					map[row][column].getObject().stack(mage);
+					mages.add(mage);
 					break;
 				case "player":
 					Player player = new Player(this);
-					player.setCell(map[column][row]);
-					player.setParent(map[column][row].getObject());
-					map[column][row].getObject().stack(player);
+					player.setCell(map[row][column]);
+					player.setParent(map[row][column].getObject());
+					map[row][column].getObject().stack(player);
 					setPlayer(player);
 					break;
 				default:

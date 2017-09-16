@@ -39,7 +39,7 @@ abstract public class BasicObject {
 
     public void render(Graphics g) {
         if (objectTile != null) { // render this tile first
-            objectTile.draw(getRow() * App.TILE_SIZE + world.X_offset, getColumn() * App.TILE_SIZE + world.Y_offset);
+            objectTile.draw(getColumn() * App.TILE_SIZE + world.X_offset, getRow() * App.TILE_SIZE + world.Y_offset);
         }
         if (child != null) { // if something is stacked on this object, continue to render it
             child.render(g);
@@ -82,6 +82,8 @@ abstract public class BasicObject {
     }
 
 
+
+
     abstract public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException;
 
 
@@ -94,31 +96,31 @@ abstract public class BasicObject {
 
         switch (direction) {
             case UP:
-                if (getColumn() - 1 < 0) {
-                    targetCell = null;
-                } else {
-                    targetCell = world.map[getColumn() - 1][getRow()];
-                }
-                break;
-            case DOWN:
-                if (getColumn() + 1 >= world.getHeight()) {
-                    targetCell = null;
-                } else {
-                    targetCell = world.map[getColumn() + 1][getRow()];
-                }
-                break;
-            case RIGHT:
-                if (getRow() + 1 >= world.getWidth()) {
-                    targetCell = null;
-                } else {
-                    targetCell = world.map[getColumn()][getRow() + 1];
-                }
-                break;
-            case LEFT:
                 if (getRow() - 1 < 0) {
                     targetCell = null;
                 } else {
-                    targetCell = world.map[getColumn()][getRow() - 1];
+                    targetCell = world.map[getRow() - 1][getColumn()];
+                }
+                break;
+            case DOWN:
+                if (getRow() + 1 >= world.getHeight()) {
+                    targetCell = null;
+                } else {
+                    targetCell = world.map[getRow() + 1][getColumn()];
+                }
+                break;
+            case RIGHT:
+                if (getColumn() + 1 >= world.getWidth()) {
+                    targetCell = null;
+                } else {
+                    targetCell = world.map[getRow()][getColumn() + 1];
+                }
+                break;
+            case LEFT:
+                if (getColumn() - 1 < 0) {
+                    targetCell = null;
+                } else {
+                    targetCell = world.map[getRow()][getColumn() - 1];
                 }
                 break;
             default:

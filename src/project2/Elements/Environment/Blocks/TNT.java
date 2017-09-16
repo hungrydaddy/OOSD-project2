@@ -29,7 +29,7 @@ public class TNT extends Block {
     public void render(Graphics g) {
         super.render(g);
         if (this.isExploding) { // if the item is exploding, show the explosion tile
-            explosionTile.draw(getCellOnDirection(Loader.Directions.LEFT).getRow() * App.TILE_SIZE + getWorld().X_offset, getCellOnDirection(Loader.Directions.UP).getColumn() * App.TILE_SIZE + getWorld().Y_offset);
+            explosionTile.draw(getCellOnDirection(Loader.Directions.LEFT).getColumn() * App.TILE_SIZE + getWorld().X_offset, getCellOnDirection(Loader.Directions.UP).getRow() * App.TILE_SIZE + getWorld().Y_offset);
         }
     }
 
