@@ -17,8 +17,9 @@ public class Target extends Floor {
 
 
     @Override
-    public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
-        super.onCollide(object, direction);
+    public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException {
+        super.contact(object, direction);
+        return true;
     }
 
 

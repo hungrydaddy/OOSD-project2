@@ -8,6 +8,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import project2.Elements.BasicCell;
+import project2.Elements.BasicObject;
 import project2.Elements.Characters.Player.Player;
 import project2.Elements.Environment.Door;
 import project2.Elements.Environment.Switch;
@@ -28,14 +29,15 @@ public class World {
 	public Integer height;
 	public Integer width;
 
-	private Game game;
-
 
 	// objects under user control
+	private Game game;
 	private Player player;
 	private ArrayList<Target> targets = new ArrayList<>();
 	private Door door;
 	private Switch mSwitch;
+
+	private ArrayList<BasicObject> lateRenderQueue = new ArrayList<>();
 
 
 
@@ -63,8 +65,24 @@ public class World {
 				map[i][j].render(g);
 			}
 		}
+
+		// rendering things afterwards
+		for (int i = 0;i < lateRenderQueue.size(); i++) {
+			lateRenderQueue.get(i).render(g);
+		}
+
 	}
 
+
+	// adding objects to the queue to render late
+	public void lateRenderAdd(BasicObject object) {
+		lateRenderQueue.add(object);
+	}
+
+	// remove from the queue
+	public void lateRenderClear() {
+		lateRenderQueue.clear();
+	}
 
 
 
@@ -110,6 +128,7 @@ public class World {
 		}
 		return true;
 	}
+
 
 
 	public Game getGame() {

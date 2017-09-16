@@ -15,10 +15,11 @@ abstract public class Enemy extends Character {
 
 
     @Override
-    public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
+    public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException {
         if (object.hasTag(Loader.Tag.PLAYER)) { // if contacts with the player
             getWorld().getGame().restartCurrentLevel();
         }
-        super.onCollide(object, direction);
+        super.contact(object, direction);
+        return true;
     }
 }

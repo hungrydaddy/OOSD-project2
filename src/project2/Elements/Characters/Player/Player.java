@@ -1,6 +1,5 @@
 package project2.Elements.Characters.Player;
 
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Loader;
 import project2.Controllers.World;
@@ -28,10 +27,11 @@ public class Player extends Character{
 
 
     @Override
-    public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
+    public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException {
         if (object.hasTag(Loader.Tag.ENEMY)) {
             // restart the game
         }
+        return true;
     }
 
 

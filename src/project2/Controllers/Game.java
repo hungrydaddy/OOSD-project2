@@ -20,7 +20,7 @@ public class Game {
 
     public Game() throws SlickException {
         // initialising the game, starting from lvl 0
-        currentLvl = 2;
+        currentLvl = 1;
         numberOfMoves = 0;
         currentWorld = new World(currentLvl, this);
         worldSnapshots = new ArrayList<>();

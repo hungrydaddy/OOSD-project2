@@ -7,7 +7,6 @@ package project2.Elements;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.App;
 import project2.Controllers.Loader;
@@ -55,9 +54,9 @@ abstract public class BasicObject {
 
 
     /* internal functions */
-    public void stackOn(BasicObject object) throws SlickException {
+    public void stack(BasicObject object) throws SlickException {
         if (getChild() == null) {
-            object.getParent().setChild(null);
+            object.unstack();
             object.setParent(this);
             object.setCell(cell);
             this.setChild(object);
@@ -65,16 +64,23 @@ abstract public class BasicObject {
     }
 
 
+    // move off the parent
+    public void unstack() throws SlickException {
+        getParent().setChild(null);
+        setParent(null);
+    }
+
+
 
     // moving towards different directions
     public Boolean move(Loader.Directions direction) throws SlickException {
         BasicCell destination = getCellOnDirection(direction);
-        destination.getObject().onCollide(this, direction);
+        destination.getObject().contact(this, direction);
         return true;
     }
 
 
-    abstract public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException;
+    abstract public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException;
 
 
 

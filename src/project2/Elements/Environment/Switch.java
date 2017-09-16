@@ -1,6 +1,5 @@
 package project2.Elements.Environment;
 
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Loader;
 import project2.Controllers.World;
@@ -17,7 +16,8 @@ public class Switch extends Target {
 
 
     @Override
-    public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
-        super.onCollide(object, direction);
+    public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException {
+        super.contact(object, direction);
+        return true;
     }
 }

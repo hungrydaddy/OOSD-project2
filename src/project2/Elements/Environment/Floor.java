@@ -1,7 +1,5 @@
 package project2.Elements.Environment;
 
-import org.lwjgl.Sys;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Loader;
 import project2.Controllers.World;
@@ -24,17 +22,19 @@ public class Floor extends BasicObject {
 
 
     @Override
-    public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
+    public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException {
+        Boolean needToStack = true;
 
         // first collide with the child
         if (getChild() != null) {
-            getChild().onCollide(object, direction);
+            needToStack = getChild().contact(object, direction);
         }
 
-        // then stack up this object
-        if (getChild() == null) {
-            stackOn(object);
+        // stack up this object
+        if (getChild() == null && needToStack) {
+            stack(object);
         }
 
+        return true;
     }
 }

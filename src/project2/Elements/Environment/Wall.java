@@ -1,6 +1,5 @@
 package project2.Elements.Environment;
 
-import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Loader;
 import project2.Controllers.World;
@@ -21,7 +20,7 @@ public class Wall extends BasicObject {
 
 
     @Override
-    public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
-
+    public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException {
+        return true;
     }
 }

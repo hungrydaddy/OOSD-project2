@@ -3,7 +3,6 @@ package project2.Elements.Characters;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Loader;
 import project2.Controllers.World;
-import project2.Elements.BasicCell;
 import project2.Elements.BasicObject;
 
 
@@ -20,8 +19,9 @@ abstract public class Character extends BasicObject {
 
 
     @Override
-    public void onCollide(BasicObject object, Loader.Directions direction) throws SlickException {
+    public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException {
         move(direction);
+        return true;
     }
 
 }
