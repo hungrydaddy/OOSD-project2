@@ -42,6 +42,7 @@ public class World {
 	private ArrayList<Skeleton> skeletons = new ArrayList<>();
 	private ArrayList<Rogue> rogues = new ArrayList<>();
 	private ArrayList<Mage> mages = new ArrayList<>();
+	private ArrayList<Ice> ices = new ArrayList<>();
 	private Door door;
 	private Switch mSwitch;
 
@@ -80,6 +81,11 @@ public class World {
 		// updating the skeletons
 		for (int i = 0;i < skeletons.size();i++) {
 			skeletons.get(i).update(null);
+		}
+
+		// updating the ice
+		for (int i = 0;i < ices.size();i++) {
+			ices.get(i).update(null);
 		}
 
 
@@ -276,6 +282,7 @@ public class World {
 					ice.setCell(map[row][column]);
 					ice.setParent(map[row][column].getObject());
 					map[row][column].getObject().stack(ice);
+					ices.add(ice);
 					break;
 				case "tnt":
 					TNT tnt = new TNT(this);

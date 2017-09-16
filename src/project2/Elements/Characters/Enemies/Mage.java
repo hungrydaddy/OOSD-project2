@@ -39,10 +39,8 @@ public class Mage extends Enemy {
             // move in X direction
             for (int i = 0;i < Math.abs(distX);i++) {
                 if (sgnX == -1) { // player on the right, move right
-                    System.out.println("right");
                     move(Loader.Directions.RIGHT);
                 } else {
-                    System.out.println("left");
                     move(Loader.Directions.LEFT);
                 }
             }
@@ -52,7 +50,6 @@ public class Mage extends Enemy {
                 if (sgnY == -1) { // player on the bottom, move down
                     move(Loader.Directions.DOWN);
                 } else {
-                    System.out.println("up");
                     move(Loader.Directions.UP);
                 }
             }

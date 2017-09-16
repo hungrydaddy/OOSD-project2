@@ -28,7 +28,6 @@ public class Skeleton extends Enemy {
     @Override
     public void update(Loader.Directions direction) throws SlickException {
         if (lastMove == null) {
-            //TODO: sort out time
             lastMove = new Date();
         }
 
