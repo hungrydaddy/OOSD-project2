@@ -75,10 +75,7 @@ abstract public class BasicObject {
     // moving towards different directions
     public Boolean move(Loader.Directions direction) throws SlickException {
         BasicCell destination = getCellOnDirection(direction);
-        if (!destination.getObject().contact(this, direction)) {
-            return false;
-        }
-        return true;
+        return destination.getObject().contact(this, direction);
     }
 
 

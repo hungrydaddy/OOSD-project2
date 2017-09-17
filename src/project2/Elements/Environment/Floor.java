@@ -23,18 +23,18 @@ public class Floor extends BasicObject {
 
     @Override
     public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException {
-        Boolean needToStack = true;
+        Boolean canStack = true;
 
         // first collide with the child
         if (getChild() != null) {
-            needToStack = getChild().contact(object, direction);
+            canStack = getChild().contact(object, direction);
         }
 
         // stack up this object
-        if (getChild() == null && needToStack) {
+        if (getChild() == null && canStack) {
             stack(object);
         }
 
-        return true;
+        return canStack;
     }
 }

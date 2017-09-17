@@ -9,6 +9,7 @@ import project2.Elements.Characters.Character;
 public class Player extends Character{
 
     private Boolean playerDead = false;
+    private Loader.Directions lastDirection;
 
     public Player(World world) throws SlickException {
         super(world);
@@ -22,6 +23,7 @@ public class Player extends Character{
     // key listener
     @Override
     public void update(Loader.Directions direction) throws SlickException {
+        lastDirection = direction;
         this.move(direction);
     }
 
@@ -32,7 +34,7 @@ public class Player extends Character{
         if (object.hasTag(Loader.Tag.ENEMY)) { //if an enemy contacted player
             playerDied();
         }
-        return true;
+        return false;
     }
 
 

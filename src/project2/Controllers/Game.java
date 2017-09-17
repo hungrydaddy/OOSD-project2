@@ -13,19 +13,17 @@ import java.util.ArrayList;
 public class Game {
 
     private int currentLvl;
-    private int numberOfMoves;
-    private ArrayList<String> worldSnapshots;
+    private int numberOfMoves = 0;
+    private ArrayList<String> worldSnapshots = new ArrayList<>();
+    private ArrayList<String> levels = new ArrayList<>();
     private World currentWorld;
-    private Boolean update = false;
+    private Boolean update = true;
 
 
     public Game() throws SlickException {
         // initialising the game, starting from lvl 0
-        currentLvl = 4;
-        numberOfMoves = 0;
+        currentLvl = 0;
         currentWorld = new World(currentLvl, this);
-        worldSnapshots = new ArrayList<>();
-        update = true;
     }
 
 
