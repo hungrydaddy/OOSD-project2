@@ -18,6 +18,7 @@ public class Game {
     private ArrayList<Extra.Tag> bannedTags = new ArrayList<>();
     private World currentWorld;
     private Boolean update = true;
+    private final int FINAL_LEVEL = 5;
 
 
 
@@ -66,6 +67,7 @@ public class Game {
         levels.add("3");
         levels.add("4");
         levels.add("5");
+        levels.add("rage0");
     }
 
 
@@ -122,7 +124,7 @@ public class Game {
 
 
     public void startNextLevel() throws SlickException {
-        if (currentLvl == 5) {
+        if (currentLvl == FINAL_LEVEL) {
             // won
             return;
         } else {
@@ -130,6 +132,8 @@ public class Game {
             return;
         }
     }
+
+
 
 
 

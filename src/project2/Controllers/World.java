@@ -82,9 +82,6 @@ public class World {
 		if (input.isKeyPressed(Input.KEY_Z)) {
 			getGame().rewind();
 		}
-		if (input.isKeyPressed(Input.KEY_N)) {
-			getGame().startNextLevel();
-		}
 
 
 		Boolean playerMoved = false;
