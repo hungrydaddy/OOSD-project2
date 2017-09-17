@@ -34,6 +34,8 @@ public class TNT extends Block {
 
 
     public void explode() throws SlickException {
+        // ban TNT from the game
+        getWorld().getGame().banTag(Extra.Tag.TNT);
         isExploding = true;
 
         getWorld().lateRenderAdd(this);
@@ -51,6 +53,7 @@ public class TNT extends Block {
         }, EXPLOSION_TIME);
 
     }
+
 
 
 

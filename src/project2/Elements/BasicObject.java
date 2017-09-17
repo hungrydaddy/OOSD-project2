@@ -96,28 +96,28 @@ abstract public class BasicObject {
                 if (getRow() - 1 < 0) {
                     targetCell = null;
                 } else {
-                    targetCell = world.map[getRow() - 1][getColumn()];
+                    targetCell = world.getMap()[getRow() - 1][getColumn()];
                 }
                 break;
             case DOWN:
                 if (getRow() + 1 >= world.getHeight()) {
                     targetCell = null;
                 } else {
-                    targetCell = world.map[getRow() + 1][getColumn()];
+                    targetCell = world.getMap()[getRow() + 1][getColumn()];
                 }
                 break;
             case RIGHT:
                 if (getColumn() + 1 >= world.getWidth()) {
                     targetCell = null;
                 } else {
-                    targetCell = world.map[getRow()][getColumn() + 1];
+                    targetCell = world.getMap()[getRow()][getColumn() + 1];
                 }
                 break;
             case LEFT:
                 if (getColumn() - 1 < 0) {
                     targetCell = null;
                 } else {
-                    targetCell = world.map[getRow()][getColumn() - 1];
+                    targetCell = world.getMap()[getRow()][getColumn() - 1];
                 }
                 break;
             default:
@@ -174,6 +174,13 @@ abstract public class BasicObject {
 
     public BasicObject getChild() {
         return child;
+    }
+
+    public BasicObject getLastChild() {
+        if (getChild() == null) {
+            return this;
+        }
+        return getChild().getLastChild();
     }
 
     public void setChild(BasicObject child) {

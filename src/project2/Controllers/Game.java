@@ -13,17 +13,20 @@ import java.util.ArrayList;
 public class Game {
 
     private int currentLvl;
-    private int numberOfMoves = 0;
     private ArrayList<String> worldSnapshots = new ArrayList<>();
     private ArrayList<String> levels = new ArrayList<>();
+    private ArrayList<Extra.Tag> bannedTags = new ArrayList<>();
     private World currentWorld;
     private Boolean update = true;
 
 
+
     public Game() throws SlickException {
+        // initialising the levels
+        setupLevels();
         // initialising the game, starting from lvl 0
         currentLvl = 0;
-        currentWorld = new World(currentLvl, this);
+        currentWorld = new World(levels.get(currentLvl), this);
     }
 
 
@@ -34,27 +37,14 @@ public class Game {
 
         currentWorld.update(input, delta);
 
-        if (currentWorld.levelWon()) {
-            if (currentLvl == 5) {
-                // won
-                return;
-            } else {
-                startLevel(++currentLvl);
-                return;
-            }
+        if (currentWorld.levelWon()) { // check whether the level was won
+            startNextLevel();
         }
 
-
-        if (currentWorld.getPlayer().playerDead()) {
+        if (currentWorld.getPlayer().playerDead()) { // check if the player died
             restartCurrentLevel();
         }
 
-        if (input.isKeyPressed(Input.KEY_R)) {
-            restartCurrentLevel();
-        }
-        if (input.isKeyPressed(Input.KEY_Z)) {
-            rewind();
-        }
     }
 
 
@@ -62,11 +52,20 @@ public class Game {
         currentWorld.render(g);
 
         // showing the number of moves
-        g.drawString("Moves: " + numberOfMoves, 20.0f, 20.0f);
+        g.drawString("Moves: " + worldSnapshots.size(), 20.0f, 20.0f);
     }
 
 
 
+
+    private void setupLevels() {
+        levels.add("0");
+        levels.add("1");
+        levels.add("2");
+        levels.add("3");
+        levels.add("4");
+        levels.add("5");
+    }
 
 
 
@@ -76,29 +75,75 @@ public class Game {
 
     /* helper functions */
     public void restartCurrentLevel() throws SlickException {
-        startLevel(currentLvl);
+        startLevel(levels.get(currentLvl));
     }
 
 
 
     // go backwards
-    private void rewind() {
-        update = false;
-        update = true;
+    public void rewind() throws SlickException {
+        if (worldSnapshots.isEmpty()) { // if the player has no past moves
+            return;
+        } else {
+            update = false;
+
+            currentWorld.worldDestroy();
+            currentWorld = null;
+            // restoring the last movement
+            currentWorld = new World(levels.get(currentLvl), this, worldSnapshots.get(worldSnapshots.size() - 1));
+            // delete the last move
+            worldSnapshots.remove(worldSnapshots.size() - 1);
+
+            update = true;
+        }
+
+    }
+
+
+
+    public void saveLastMove() {
+        worldSnapshots.add(Extra.snapshot(currentWorld));
     }
 
 
     // purge everything and restart
-    private void startLevel(int level) throws SlickException {
+    private void startLevel(String level) throws SlickException {
+        bannedTags.clear();
         update = false;
         worldSnapshots.clear();
         currentWorld.worldDestroy();
         currentWorld = null;
         currentWorld = new World(level, this);
-        numberOfMoves = 0;
 
         update = true;
     }
 
+
+    public void startNextLevel() throws SlickException {
+        if (currentLvl == 5) {
+            // won
+            return;
+        } else {
+            startLevel(levels.get(++currentLvl));
+            return;
+        }
+    }
+
+
+
+    public void banTag(Extra.Tag tag) {
+        bannedTags.add(tag);
+    }
+
+    public void unbanTag(Extra.Tag tag) {
+        bannedTags.remove(tag);
+    }
+
+    public Boolean tagBanned(Extra.Tag tag) {
+        if (bannedTags.contains(tag)) {
+            return true;
+        }
+        return false;
+    }
 
 }

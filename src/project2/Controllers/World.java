@@ -27,12 +27,11 @@ import java.util.ArrayList;
 public class World {
 
 	// map info
-	public BasicCell[][] map;
+	private BasicCell[][] map;
 	public Integer X_offset;
 	public Integer Y_offset;
 	private Integer height;
 	private Integer width;
-	private Boolean nextLevel = false;
 
 
 	// objects under user control
@@ -50,9 +49,24 @@ public class World {
 
 
 
-	public World(int level, Game game) throws SlickException {
+	public World(String level, Game game) throws SlickException {
 		this.game = game;
 		ArrayList<String> lvlInfo = loadLevelFile(level);
+		setupOffsets(lvlInfo.get(0));
+		parseLevel(lvlInfo);
+	}
+
+
+
+	public World(String level, Game game, String lastWorld) throws SlickException {
+		this.game = game;
+		ArrayList<String> lvlInfo = new ArrayList<>();
+		String[] lastWorldList = lastWorld.split("\n");
+
+		for (int i = 0;i < lastWorldList.length;i++) {
+			lvlInfo.add(lastWorldList[i]);
+		}
+
 		setupOffsets(lvlInfo.get(0));
 		parseLevel(lvlInfo);
 	}
@@ -62,18 +76,33 @@ public class World {
 
 	public void update(Input input, int delta) throws SlickException {
 
+		if (input.isKeyPressed(Input.KEY_R)) {
+			getGame().restartCurrentLevel();
+		}
+		if (input.isKeyPressed(Input.KEY_Z)) {
+			getGame().rewind();
+		}
+		if (input.isKeyPressed(Input.KEY_N)) {
+			getGame().startNextLevel();
+		}
+
+
 		Boolean playerMoved = false;
-		// updating the player
+		// updating the player, save if valid move
 		if (input.isKeyPressed(Input.KEY_UP)) {
+			getGame().saveLastMove();
 			player.update(Extra.Directions.UP);
 			playerMoved = true;
 		} else if (input.isKeyPressed(Input.KEY_DOWN)) {
+			getGame().saveLastMove();
 			player.update(Extra.Directions.DOWN);
 			playerMoved = true;
 		} else if (input.isKeyPressed(Input.KEY_LEFT)) {
+			getGame().saveLastMove();
 			player.update(Extra.Directions.LEFT);
 			playerMoved = true;
 		} else if (input.isKeyPressed(Input.KEY_RIGHT)) {
+			getGame().saveLastMove();
 			player.update(Extra.Directions.RIGHT);
 			playerMoved = true;
 		}
@@ -89,15 +118,18 @@ public class World {
 		}
 
 
-		if (playerMoved) {
-			// door toggle
-			if (getSwitch() != null) {
-				if (getSwitch().hasBlock()) {
-					getDoor().doorHide();
-				} else {
-					getDoor().doorShow();
-				}
+		// door toggle
+		if (getSwitch() != null && getDoor() != null) {
+			if (getSwitch().hasBlock()) {
+				getDoor().doorHide();
+			} else {
+				getDoor().doorShow();
 			}
+		}
+
+
+		// if the player entered a valid move
+		if (playerMoved) {
 
 			// rogue update
 			for (int i = 0;i < rogues.size();i++) {
@@ -108,7 +140,6 @@ public class World {
 			for (int i = 0;i < mages.size();i++) {
 				mages.get(i).update(null);
 			}
-
 		}
 
 	}
@@ -138,6 +169,9 @@ public class World {
 
 	// remove from the queue
 	public void lateRenderClear() {
+		if (lateRenderQueue == null) {
+			return;
+		}
 		lateRenderQueue.clear();
 	}
 
@@ -156,7 +190,7 @@ public class World {
 
 
 	//
-	private ArrayList<String> loadLevelFile(int level) {
+	private ArrayList<String> loadLevelFile(String level) {
 		String lvlFilePath = "res/levels/" + level + ".lvl";
 		ArrayList<String> lvlInfo = new ArrayList<String>();
 		String line;
@@ -254,68 +288,71 @@ public class World {
 				case "cracked":
 					CrackedWall cracked = new CrackedWall(this);
 					cracked.setCell(map[row][column]);
-					cracked.setParent(map[row][column].getObject());
-					map[row][column].getObject().stack(cracked);
+					cracked.setParent(map[row][column].getObject().getLastChild());
+					cracked.getParent().stack(cracked);
 					break;
 				case "switch":
 					Switch mSwitch = new Switch(this);
 					mSwitch.setCell(map[row][column]);
-					mSwitch.setParent(map[row][column].getObject());
-					map[row][column].getObject().stack(mSwitch);
+					mSwitch.setParent(map[row][column].getObject().getLastChild());
+					mSwitch.getParent().stack(mSwitch);
 					setSwitch(mSwitch);
 					break;
 				case "door":
 					Door door = new Door(this);
 					door.setCell(map[row][column]);
-					door.setParent(map[row][column].getObject());
-					map[row][column].getObject().stack(door);
+					door.setParent(map[row][column].getObject().getLastChild());
+					door.getParent().stack(door);
 					setDoor(door);
 					break;
 				case "stone":
 					Block block = new Block(this);
 					block.setCell(map[row][column]);
-					block.setParent(map[row][column].getObject());
-					map[row][column].getObject().stack(block);
+					block.setParent(map[row][column].getObject().getLastChild());
+					block.getParent().stack(block);
 					break;
 				case "ice":
 					Ice ice = new Ice(this);
 					ice.setCell(map[row][column]);
-					ice.setParent(map[row][column].getObject());
-					map[row][column].getObject().stack(ice);
+					ice.setParent(map[row][column].getObject().getLastChild());
+					ice.getParent().stack(ice);
 					ices.add(ice);
 					break;
 				case "tnt":
+					if (getGame().tagBanned(Extra.Tag.TNT)) {
+						break;
+					}
 					TNT tnt = new TNT(this);
 					tnt.setCell(map[row][column]);
-					tnt.setParent(map[row][column].getObject());
-					map[row][column].getObject().stack(tnt);
+					tnt.setParent(map[row][column].getObject().getLastChild());
+					tnt.getParent().stack(tnt);
 					break;
 				case "skeleton":
 					Skeleton skeleton = new Skeleton(this);
 					skeleton.setCell(map[row][column]);
-					skeleton.setParent(map[row][column].getObject());
-					map[row][column].getObject().stack(skeleton);
+					skeleton.setParent(map[row][column].getObject().getLastChild());
+					skeleton.getParent().stack(skeleton);
 					skeletons.add(skeleton);
 					break;
 				case "rogue":
 					Rogue rogue = new Rogue(this);
 					rogue.setCell(map[row][column]);
-					rogue.setParent(map[row][column].getObject());
-					map[row][column].getObject().stack(rogue);
+					rogue.setParent(map[row][column].getObject().getLastChild());
+					rogue.getParent().stack(rogue);
 					rogues.add(rogue);
 					break;
 				case "mage":
 					Mage mage = new Mage(this);
 					mage.setCell(map[row][column]);
-					mage.setParent(map[row][column].getObject());
-					map[row][column].getObject().stack(mage);
+					mage.setParent(map[row][column].getObject().getLastChild());
+					mage.getParent().stack(mage);
 					mages.add(mage);
 					break;
 				case "player":
 					Player player = new Player(this);
 					player.setCell(map[row][column]);
-					player.setParent(map[row][column].getObject());
-					map[row][column].getObject().stack(player);
+					player.setParent(map[row][column].getObject().getLastChild());
+					player.getParent().stack(player);
 					setPlayer(player);
 					break;
 				default:
@@ -345,6 +382,10 @@ public class World {
 		return game;
 	}
 
+	public BasicCell[][] getMap() {
+		return map;
+	}
+
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
@@ -372,7 +413,4 @@ public class World {
 	public void addTarget(Target target) {
 		this.targets.add(target);
 	}
-
-
-
 }
