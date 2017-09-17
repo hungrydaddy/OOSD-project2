@@ -1,25 +1,24 @@
 package project2.Elements.Characters.Enemies;
 
 import org.newdawn.slick.SlickException;
-import project2.Controllers.Loader;
+import project2.Controllers.Extra;
 import project2.Controllers.World;
-import project2.Elements.BasicCell;
 
 public class Rogue extends Enemy {
 
-    private Loader.Directions movingDirection;
+    private Extra.Directions movingDirection;
 
     public Rogue(World world) throws SlickException {
         super(world);
-        getTags().add(Loader.Tag.ROGUE);
+        getTags().add(Extra.Tag.ROGUE);
         setObjectTile("rogue");
-        movingDirection = Loader.Directions.LEFT;
+        movingDirection = Extra.Directions.LEFT;
     }
 
 
 
     @Override
-    public void update(Loader.Directions direction) throws SlickException {
+    public void update(Extra.Directions direction) throws SlickException {
         // auto movement for rogue
         if (!move(movingDirection)) {
             changeDirection();
@@ -32,10 +31,10 @@ public class Rogue extends Enemy {
 
 
     private void changeDirection() {
-        if (movingDirection == Loader.Directions.LEFT) {
-            movingDirection = Loader.Directions.RIGHT;
+        if (movingDirection == Extra.Directions.LEFT) {
+            movingDirection = Extra.Directions.RIGHT;
         } else {
-            movingDirection = Loader.Directions.LEFT;
+            movingDirection = Extra.Directions.LEFT;
         }
     }
 

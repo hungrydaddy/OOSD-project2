@@ -17,7 +17,7 @@ import project2.Elements.Environment.Blocks.TNT;
 
 import java.util.ArrayList;
 
-public class Loader {
+public class Extra {
 	// Converts a world coordinate to a tile coordinate,
 	// and returns if that location is a blocked tile
 

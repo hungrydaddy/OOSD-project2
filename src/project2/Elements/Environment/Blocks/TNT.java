@@ -1,11 +1,10 @@
 package project2.Elements.Environment.Blocks;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.App;
-import project2.Controllers.Loader;
+import project2.Controllers.Extra;
 import project2.Controllers.World;
 
 import java.util.Timer;
@@ -19,7 +18,7 @@ public class TNT extends Block {
 
     public TNT(World world) throws SlickException {
         super(world);
-        getTags().add(Loader.Tag.TNT);
+        getTags().add(Extra.Tag.TNT);
         setObjectTile("tnt");
         explosionTile = new Image("res/explosion.png");
     }
@@ -29,7 +28,7 @@ public class TNT extends Block {
     public void render(Graphics g) {
         super.render(g);
         if (this.isExploding) { // if the item is exploding, show the explosion tile
-            explosionTile.draw(getCellOnDirection(Loader.Directions.LEFT).getColumn() * App.TILE_SIZE + getWorld().X_offset, getCellOnDirection(Loader.Directions.UP).getRow() * App.TILE_SIZE + getWorld().Y_offset);
+            explosionTile.draw(getCellOnDirection(Extra.Directions.LEFT).getColumn() * App.TILE_SIZE + getWorld().X_offset, getCellOnDirection(Extra.Directions.UP).getRow() * App.TILE_SIZE + getWorld().Y_offset);
         }
     }
 

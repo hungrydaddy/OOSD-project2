@@ -1,32 +1,28 @@
 package project2.Elements.Characters.Enemies;
 
-import org.lwjgl.Sys;
 import org.newdawn.slick.SlickException;
-import project2.Controllers.Loader;
+import project2.Controllers.Extra;
 import project2.Controllers.World;
 import project2.Elements.BasicCell;
 
-import java.sql.Time;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Skeleton extends Enemy {
 
-    private Loader.Directions movingDirection = Loader.Directions.UP;
+    private Extra.Directions movingDirection = Extra.Directions.UP;
 
     private Date lastMove;
     private final int MOVE_INTERVAL = 1000;
 
     public Skeleton(World world) throws SlickException {
         super(world);
-        getTags().add(Loader.Tag.SKELETON);
+        getTags().add(Extra.Tag.SKELETON);
         setObjectTile("skull");
     }
 
 
     @Override
-    public void update(Loader.Directions direction) throws SlickException {
+    public void update(Extra.Directions direction) throws SlickException {
         if (lastMove == null) {
             lastMove = new Date();
         }
@@ -48,10 +44,10 @@ public class Skeleton extends Enemy {
 
 
     @Override
-    public Boolean move(Loader.Directions direction) throws SlickException {
+    public Boolean move(Extra.Directions direction) throws SlickException {
         BasicCell destination = getCellOnDirection(direction);
 
-        if (destination.getObject().childrenHaveTag(Loader.Tag.BLOCK)) {
+        if (destination.getObject().childrenHaveTag(Extra.Tag.BLOCK)) {
             return false;
         }
         return super.move(direction);
@@ -61,10 +57,10 @@ public class Skeleton extends Enemy {
 
 
     private void changeDirection() {
-        if (movingDirection == Loader.Directions.UP) {
-            movingDirection = Loader.Directions.DOWN;
+        if (movingDirection == Extra.Directions.UP) {
+            movingDirection = Extra.Directions.DOWN;
         } else {
-            movingDirection = Loader.Directions.UP;
+            movingDirection = Extra.Directions.UP;
         }
     }
 

@@ -1,7 +1,7 @@
 package project2.Elements.Characters.Player;
 
 import org.newdawn.slick.SlickException;
-import project2.Controllers.Loader;
+import project2.Controllers.Extra;
 import project2.Controllers.World;
 import project2.Elements.BasicObject;
 import project2.Elements.Characters.Character;
@@ -9,11 +9,11 @@ import project2.Elements.Characters.Character;
 public class Player extends Character{
 
     private Boolean playerDead = false;
-    private Loader.Directions lastDirection;
+    private Extra.Directions lastDirection;
 
     public Player(World world) throws SlickException {
         super(world);
-        getTags().add(Loader.Tag.PLAYER);
+        getTags().add(Extra.Tag.PLAYER);
         setObjectTile("player_left");
     }
 
@@ -22,7 +22,7 @@ public class Player extends Character{
 
     // key listener
     @Override
-    public void update(Loader.Directions direction) throws SlickException {
+    public void update(Extra.Directions direction) throws SlickException {
         lastDirection = direction;
         this.move(direction);
     }
@@ -30,8 +30,8 @@ public class Player extends Character{
 
 
     @Override
-    public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException {
-        if (object.hasTag(Loader.Tag.ENEMY)) { //if an enemy contacted player
+    public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException {
+        if (object.hasTag(Extra.Tag.ENEMY)) { //if an enemy contacted player
             playerDied();
         }
         return false;

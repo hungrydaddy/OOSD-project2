@@ -65,16 +65,16 @@ public class World {
 		Boolean playerMoved = false;
 		// updating the player
 		if (input.isKeyPressed(Input.KEY_UP)) {
-			player.update(Loader.Directions.UP);
+			player.update(Extra.Directions.UP);
 			playerMoved = true;
 		} else if (input.isKeyPressed(Input.KEY_DOWN)) {
-			player.update(Loader.Directions.DOWN);
+			player.update(Extra.Directions.DOWN);
 			playerMoved = true;
 		} else if (input.isKeyPressed(Input.KEY_LEFT)) {
-			player.update(Loader.Directions.LEFT);
+			player.update(Extra.Directions.LEFT);
 			playerMoved = true;
 		} else if (input.isKeyPressed(Input.KEY_RIGHT)) {
-			player.update(Loader.Directions.RIGHT);
+			player.update(Extra.Directions.RIGHT);
 			playerMoved = true;
 		}
 

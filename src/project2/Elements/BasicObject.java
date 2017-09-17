@@ -9,7 +9,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.App;
-import project2.Controllers.Loader;
+import project2.Controllers.Extra;
 import project2.Controllers.World;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ abstract public class BasicObject {
     private BasicCell cell;
     private BasicObject parent;
     private BasicObject child;
-    private ArrayList<Loader.Tag> tags;
+    private ArrayList<Extra.Tag> tags;
 
 
     public BasicObject(World world) {
@@ -34,7 +34,7 @@ abstract public class BasicObject {
 
 
 
-    abstract public void update(Loader.Directions direction) throws SlickException;
+    abstract public void update(Extra.Directions direction) throws SlickException;
 
 
     public void render(Graphics g) {
@@ -73,7 +73,7 @@ abstract public class BasicObject {
 
 
     // moving towards different directions
-    public Boolean move(Loader.Directions direction) throws SlickException {
+    public Boolean move(Extra.Directions direction) throws SlickException {
         BasicCell destination = getCellOnDirection(direction);
         return destination.getObject().contact(this, direction);
     }
@@ -81,14 +81,14 @@ abstract public class BasicObject {
 
 
 
-    abstract public Boolean contact(BasicObject object, Loader.Directions direction) throws SlickException;
+    abstract public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException;
 
 
 
 
 
     // get a cell in a direction
-    public BasicCell getCellOnDirection(Loader.Directions direction) {
+    public BasicCell getCellOnDirection(Extra.Directions direction) {
         BasicCell targetCell;
 
         switch (direction) {
@@ -131,7 +131,7 @@ abstract public class BasicObject {
 
 
 
-    public Boolean childrenHaveTag(Loader.Tag tag) {
+    public Boolean childrenHaveTag(Extra.Tag tag) {
         if (hasTag(tag)) {
             return true;
         } else if (getChild() != null) {
@@ -188,7 +188,7 @@ abstract public class BasicObject {
         this.parent = parent;
     }
 
-    public ArrayList<Loader.Tag> getTags() {
+    public ArrayList<Extra.Tag> getTags() {
         return tags;
     }
 
@@ -200,7 +200,7 @@ abstract public class BasicObject {
         return cell;
     }
 
-    public Boolean hasTag(Loader.Tag tag) {
+    public Boolean hasTag(Extra.Tag tag) {
         if (tags.contains(tag)) {
             return true;
         }

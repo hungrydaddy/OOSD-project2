@@ -2,8 +2,6 @@ package project2.Elements;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import project2.Controllers.Loader;
-import project2.Controllers.World;
 
 public class BasicCell {
 
