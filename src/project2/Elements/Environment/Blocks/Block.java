@@ -20,6 +20,9 @@ public class Block extends BasicObject {
 
     @Override
     public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException {
+        if (object.hasTag(Extra.Tag.ICE)) {
+            return false;
+        }
         move(direction);
         return true;
     }

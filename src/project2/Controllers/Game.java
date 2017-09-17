@@ -39,6 +39,7 @@ public class Game {
 
         if (currentWorld.levelWon()) { // check whether the level was won
             startNextLevel();
+            return;
         }
 
         if (currentWorld.getPlayer().playerDead()) { // check if the player died
@@ -108,8 +109,9 @@ public class Game {
 
     // purge everything and restart
     private void startLevel(String level) throws SlickException {
-        bannedTags.clear();
         update = false;
+
+        bannedTags.clear();
         worldSnapshots.clear();
         currentWorld.worldDestroy();
         currentWorld = null;
@@ -135,9 +137,6 @@ public class Game {
         bannedTags.add(tag);
     }
 
-    public void unbanTag(Extra.Tag tag) {
-        bannedTags.remove(tag);
-    }
 
     public Boolean tagBanned(Extra.Tag tag) {
         if (bannedTags.contains(tag)) {
