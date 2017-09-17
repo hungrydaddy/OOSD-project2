@@ -10,7 +10,6 @@ abstract public class Character extends BasicObject {
 
     public Character(World world) throws SlickException {
         super(world);
-        getTags().add(Extra.Tag.MOVEABLE);
     }
 
 

@@ -67,7 +67,6 @@ public class Game {
         levels.add("3");
         levels.add("4");
         levels.add("5");
-        levels.add("rage0");
     }
 
 

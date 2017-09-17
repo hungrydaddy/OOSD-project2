@@ -9,7 +9,6 @@ import project2.Elements.Characters.Character;
 public class Player extends Character{
 
     private Boolean playerDead = false;
-    private Extra.Directions lastDirection;
 
     public Player(World world) throws SlickException {
         super(world);
@@ -23,7 +22,6 @@ public class Player extends Character{
     // key listener
     @Override
     public void update(Extra.Directions direction) throws SlickException {
-        lastDirection = direction;
         this.move(direction);
     }
 
