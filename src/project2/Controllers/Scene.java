@@ -223,6 +223,9 @@ public class Scene {
 					map[row][column].setObject(newTarget);
 					break;
 				case "cracked":
+					if (usedTNT) {
+						break;
+					}
 					CrackedWall cracked = new CrackedWall(this, map[row][column]);
 					cracked.setParent(map[row][column].getObject().getLastChild());
 					cracked.getParent().stack(cracked);
