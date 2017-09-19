@@ -7,6 +7,7 @@ import org.newdawn.slick.SlickException;
 import project2.Controllers.App;
 import project2.Controllers.Extra;
 import project2.Controllers.Scene;
+import project2.Elements.BasicCell;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,8 +16,8 @@ public class TNT extends Block {
 
     private Boolean exploded = false;
 
-    public TNT(Scene scene) throws SlickException {
-        super(scene);
+    public TNT(Scene scene, BasicCell cell) throws SlickException {
+        super(scene, cell);
         getTags().add(Extra.Tag.TNT);
         setObjectTile("tnt");
     }

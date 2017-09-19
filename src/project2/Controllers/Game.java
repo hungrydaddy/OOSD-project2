@@ -26,17 +26,17 @@ public class Game {
     }
 
 
-    public void update(Input input, int delta) throws SlickException {
+    public void update(Input input) throws SlickException {
         if (!update) {
             return;
         }
 
-        if (currentLevel.levelWon()) { // go to the next level if current is won
+        if (currentLevel.levelWon() || input.isKeyPressed(Input.KEY_X)) { // go to the next level if current is won
             startNextLevel();
             return;
         }
 
-        currentLevel.update(input, delta);
+        currentLevel.update(input);
     }
 
 

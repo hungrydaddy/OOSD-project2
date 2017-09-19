@@ -3,14 +3,15 @@ package project2.Elements.Environment;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
 import project2.Controllers.Scene;
+import project2.Elements.BasicCell;
 import project2.Elements.BasicObject;
 
 public class Floor extends BasicObject {
 
 
 
-    public Floor(Scene scene) throws SlickException {
-        super(scene);
+    public Floor(Scene scene, BasicCell cell) throws SlickException {
+        super(scene, cell);
         getTags().add(Extra.Tag.FLOOR);
         setObjectTile("floor");
     }

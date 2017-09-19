@@ -49,7 +49,7 @@ public class App extends BasicGame
     {
         // Get data about the current input (keyboard state).
         Input input = gc.getInput();
-        currentGame.update(input, delta);
+        currentGame.update(input);
     }
 
     /** Render the entire screen, so it reflects the current level state.

@@ -48,7 +48,6 @@ public class Scene {
 
 
 	public Scene(Boolean usedTNT, Level level, String snapshot) throws SlickException {
-		this.level = level;
 		this.usedTNT = usedTNT;
 
 		parseLevel(snapshot);
@@ -57,27 +56,7 @@ public class Scene {
 
 
 
-	public void update(Input input, int delta) throws SlickException {
-
-		Boolean playerMoved = false;
-		// updating the player, save if valid move
-		if (input.isKeyPressed(Input.KEY_UP)) {
-			getLevel().saveLastScene();
-			player.update(Extra.Directions.UP);
-			playerMoved = true;
-		} else if (input.isKeyPressed(Input.KEY_DOWN)) {
-			getLevel().saveLastScene();
-			player.update(Extra.Directions.DOWN);
-			playerMoved = true;
-		} else if (input.isKeyPressed(Input.KEY_LEFT)) {
-			getLevel().saveLastScene();
-			player.update(Extra.Directions.LEFT);
-			playerMoved = true;
-		} else if (input.isKeyPressed(Input.KEY_RIGHT)) {
-			getLevel().saveLastScene();
-			player.update(Extra.Directions.RIGHT);
-			playerMoved = true;
-		}
+	public void update(Boolean playerMoved) throws SlickException {
 
 		// updating the skeletons
 		for (int i = 0;i < skeletons.size();i++) {
@@ -233,45 +212,40 @@ public class Scene {
 			// applying different rules to objects and terrains
 			switch (temp[0]) {
 				case "floor":
-					map[row][column].setObject(new Floor(this));
+					map[row][column].setObject(new Floor(this, map[row][column]));
 					break;
 				case "wall":
-					map[row][column].setObject(new Wall(this));
+					map[row][column].setObject(new Wall(this, map[row][column]));
 					break;
 				case "target":
-					Target newTarget = new Target(this);
+					Target newTarget = new Target(this, map[row][column]);
 					addTarget(newTarget);
 					map[row][column].setObject(newTarget);
 					break;
 				case "cracked":
-					CrackedWall cracked = new CrackedWall(this);
-					cracked.setCell(map[row][column]);
+					CrackedWall cracked = new CrackedWall(this, map[row][column]);
 					cracked.setParent(map[row][column].getObject().getLastChild());
 					cracked.getParent().stack(cracked);
 					break;
 				case "switch":
-					Switch mSwitch = new Switch(this);
-					mSwitch.setCell(map[row][column]);
+					Switch mSwitch = new Switch(this, map[row][column]);
 					mSwitch.setParent(map[row][column].getObject().getLastChild());
 					mSwitch.getParent().stack(mSwitch);
 					setSwitch(mSwitch);
 					break;
 				case "door":
-					Door door = new Door(this);
-					door.setCell(map[row][column]);
+					Door door = new Door(this, map[row][column]);
 					door.setParent(map[row][column].getObject().getLastChild());
 					door.getParent().stack(door);
 					setDoor(door);
 					break;
 				case "stone":
-					Block block = new Block(this);
-					block.setCell(map[row][column]);
+					Block block = new Block(this, map[row][column]);
 					block.setParent(map[row][column].getObject().getLastChild());
 					block.getParent().stack(block);
 					break;
 				case "ice":
-					Ice ice = new Ice(this);
-					ice.setCell(map[row][column]);
+					Ice ice = new Ice(this, map[row][column]);
 					ice.setParent(map[row][column].getObject().getLastChild());
 					ice.getParent().stack(ice);
 					ices.add(ice);
@@ -280,36 +254,31 @@ public class Scene {
 					if (usedTNT) {
 						break;
 					}
-					TNT tnt = new TNT(this);
-					tnt.setCell(map[row][column]);
+					TNT tnt = new TNT(this, map[row][column]);
 					tnt.setParent(map[row][column].getObject().getLastChild());
 					tnt.getParent().stack(tnt);
 					this.tnt = tnt;
 					break;
 				case "skeleton":
-					Skeleton skeleton = new Skeleton(this);
-					skeleton.setCell(map[row][column]);
+					Skeleton skeleton = new Skeleton(this, map[row][column]);
 					skeleton.setParent(map[row][column].getObject().getLastChild());
 					skeleton.getParent().stack(skeleton);
 					skeletons.add(skeleton);
 					break;
 				case "rogue":
-					Rogue rogue = new Rogue(this);
-					rogue.setCell(map[row][column]);
+					Rogue rogue = new Rogue(this, map[row][column]);
 					rogue.setParent(map[row][column].getObject().getLastChild());
 					rogue.getParent().stack(rogue);
 					rogues.add(rogue);
 					break;
 				case "mage":
-					Mage mage = new Mage(this);
-					mage.setCell(map[row][column]);
+					Mage mage = new Mage(this, map[row][column]);
 					mage.setParent(map[row][column].getObject().getLastChild());
 					mage.getParent().stack(mage);
 					mages.add(mage);
 					break;
 				case "player":
-					Player player = new Player(this);
-					player.setCell(map[row][column]);
+					Player player = new Player(this, map[row][column]);
 					player.setParent(map[row][column].getObject().getLastChild());
 					player.getParent().stack(player);
 					setPlayer(player);
@@ -337,10 +306,6 @@ public class Scene {
 		return width;
 	}
 
-	public Level getLevel() {
-		return level;
-	}
-
 	public BasicCell[][] getMap() {
 		return map;
 	}
@@ -363,6 +328,10 @@ public class Scene {
 
 	public Switch getSwitch() {
 		return mSwitch;
+	}
+
+	public ArrayList<Ice> getIces() {
+		return ices;
 	}
 
 	public void setSwitch(Switch mSwitch) {

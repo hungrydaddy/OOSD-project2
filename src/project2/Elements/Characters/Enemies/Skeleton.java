@@ -14,8 +14,8 @@ public class Skeleton extends Enemy {
     private Date lastMove;
     private final int MOVE_INTERVAL = 1000;
 
-    public Skeleton(Scene scene) throws SlickException {
-        super(scene);
+    public Skeleton(Scene scene, BasicCell cell) throws SlickException {
+        super(scene, cell);
         getTags().add(Extra.Tag.SKELETON);
         setObjectTile("skull");
     }

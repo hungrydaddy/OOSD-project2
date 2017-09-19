@@ -27,7 +27,7 @@ public class Level {
 
 
 
-    public void update(Input input, int delta) throws SlickException {
+    public void update(Input input) throws SlickException {
         if (input.isKeyPressed(Input.KEY_R)) {
             rewind(true);
         }
@@ -36,10 +36,33 @@ public class Level {
         }
 
 
+        Boolean playerMoved = false;
+        // updating the player, save if valid move
+        if (input.isKeyPressed(Input.KEY_UP)) {
+            saveLastScene();
+            currentScene.getPlayer().update(Extra.Directions.UP);
+            playerMoved = true;
+        } else if (input.isKeyPressed(Input.KEY_DOWN)) {
+            saveLastScene();
+            currentScene.getPlayer().update(Extra.Directions.DOWN);
+            playerMoved = true;
+        } else if (input.isKeyPressed(Input.KEY_LEFT)) {
+            saveLastScene();
+            currentScene.getPlayer().update(Extra.Directions.LEFT);
+            playerMoved = true;
+        } else if (input.isKeyPressed(Input.KEY_RIGHT)) {
+            saveLastScene();
+            currentScene.getPlayer().update(Extra.Directions.RIGHT);
+            playerMoved = true;
+        }
+
+
+
+
         if (!update) {
             return;
         } else { // when updating
-            currentScene.update(input, delta);
+            currentScene.update(playerMoved);
             if (currentScene.getPlayer().playerDead()) { // check if the player died
                 rewind(true);
             }

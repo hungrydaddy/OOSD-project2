@@ -25,8 +25,9 @@ abstract public class BasicObject {
     private ArrayList<Extra.Tag> tags;
 
 
-    public BasicObject(Scene scene) {
+    public BasicObject(Scene scene, BasicCell cell) {
         this.scene = scene;
+        this.cell = cell;
         this.tags = new ArrayList<>();
     }
 

@@ -3,12 +3,13 @@ package project2.Elements.Environment.Blocks;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
 import project2.Controllers.Scene;
+import project2.Elements.BasicCell;
 import project2.Elements.BasicObject;
 
 public class Block extends BasicObject {
 
-    public Block(Scene scene) throws SlickException {
-        super(scene);
+    public Block(Scene scene, BasicCell cell) throws SlickException {
+        super(scene, cell);
         getTags().add(Extra.Tag.BLOCK);
         setObjectTile("stone");
     }

@@ -3,6 +3,7 @@ package project2.Elements.Environment.Blocks;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
 import project2.Controllers.Scene;
+import project2.Elements.BasicCell;
 
 import java.util.Date;
 
@@ -11,13 +12,15 @@ public class Ice extends Block {
     private Boolean sliding = false;
     private Date lastMoveDate;
     private Extra.Directions lastDirection;
+    private BasicCell lastStaticPostion;
     private final int MOVE_INTERVAL = 250;
 
 
-    public Ice(Scene scene) throws SlickException {
-        super(scene);
+    public Ice(Scene scene, BasicCell cell) throws SlickException {
+        super(scene, cell);
         getTags().add(Extra.Tag.ICE);
         setObjectTile("ice");
+        lastStaticPostion = getCell();
     }
 
 
@@ -25,6 +28,7 @@ public class Ice extends Block {
     @Override
     public void update(Extra.Directions direction) throws SlickException {
         if (!sliding) {
+            lastStaticPostion = getCell();
             return;
         }
 
@@ -53,5 +57,16 @@ public class Ice extends Block {
         lastDirection = direction;
 
         return super.move(direction);
+    }
+
+
+
+
+
+
+
+
+    public BasicCell getLastStaticPostion() {
+        return lastStaticPostion;
     }
 }

@@ -6,6 +6,7 @@ package project2.Controllers;
 
 import com.sun.org.apache.xml.internal.serializer.OutputPropertiesFactory;
 import project2.Elements.BasicObject;
+import project2.Elements.Environment.Blocks.Ice;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -73,6 +74,18 @@ public class Extra {
 			extract = extract + "\ndoor," + scene.getDoor().getColumn() + "," + scene.getDoor().getRow();
 		}
 
+		// deal with the ices
+		if (!scene.getIces().isEmpty()) {
+			for (int i = 0;i < scene.getIces().size();i++) {
+				extract = extract + "\nice," +  scene.getIces().get(i).getLastStaticPostion().getColumn() + "," + scene.getIces().get(i).getLastStaticPostion().getRow();
+			}
+		}
+
+		// deal with the player
+		if (scene.getPlayer() != null) {
+			extract = extract + "\nplayer," + scene.getPlayer().getColumn() + "," + scene.getPlayer().getRow();
+		}
+
 		return extract;
 	}
 
@@ -99,7 +112,8 @@ public class Extra {
 			return "";
 			// deal with the door outside of this function
 		} else if (object.hasTag(Tag.ICE)) {
-			output += "ice";
+			return "";
+			// deal with the ices outside of this function
 		} else if (object.hasTag(Tag.TNT)) {
 			output += "tnt";
 		} else if (object.hasTag(Tag.BLOCK)) {
@@ -111,7 +125,8 @@ public class Extra {
 		} else if (object.hasTag(Tag.MAGE)) {
 			output += "mage";
 		} else if (object.hasTag(Tag.PLAYER)) {
-			output += "player";
+			return "";
+			// deal with the player outside of this function
 		}
 
 
