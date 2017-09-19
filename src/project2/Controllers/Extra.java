@@ -4,19 +4,13 @@
 
 package project2.Controllers;
 
-import org.lwjgl.Sys;
-import org.newdawn.slick.SlickException;
-import project2.Elements.BasicCell;
+import com.sun.org.apache.xml.internal.serializer.OutputPropertiesFactory;
 import project2.Elements.BasicObject;
-import project2.Elements.Characters.Enemies.Mage;
-import project2.Elements.Characters.Enemies.Rogue;
-import project2.Elements.Characters.Enemies.Skeleton;
-import project2.Elements.Characters.Player.Player;
-import project2.Elements.Environment.*;
-import project2.Elements.Environment.Blocks.Block;
-import project2.Elements.Environment.Blocks.Ice;
-import project2.Elements.Environment.Blocks.TNT;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Extra {
@@ -26,7 +20,7 @@ public class Extra {
 
 
 	public enum Tag {
-		PLAYER, MOVEABLE, ENEMY,
+		PLAYER, ENEMY,
 		SKELETON, ROGUE, MAGE,
 		FLOOR, TARGET, SWITCH, DOOR, WALL, CRACKED,
 		BLOCK, ICE, TNT
@@ -40,19 +34,43 @@ public class Extra {
 
 
 
-	// taking a snaoshot of the current world
-	public static String snapshot(World world) {
-		String extract = "" + world.getWidth() + "," + world.getHeight();
+	public static String loadLevelFile(int lvl_num) {
+		String lvlFilePath = "res/levels/" + lvl_num + ".lvl";
+		String output = "";
 
-		for (int i = 0;i < world.getHeight();i++) {
-			for (int j = 0;j < world.getWidth();j++) {
-				extract += translateObjectToString(world.getMap()[i][j].getObject());
+		// try reading the csv file and append it to an array for later usage
+		try (BufferedReader reader = new BufferedReader(new FileReader(lvlFilePath))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				output = output + line + "\n";
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return output;
+	}
+
+
+
+
+
+
+	// taking a snaoshot of the current scene
+	public static String snapshot(Scene scene) {
+		String extract = "" + scene.getWidth() + "," + scene.getHeight();
+
+		for (int i = 0; i < scene.getHeight(); i++) {
+			for (int j = 0; j < scene.getWidth(); j++) {
+				extract += translateObjectToString(scene.getMap()[i][j].getObject());
 			}
 		}
 
 		// deal with the door at the end
-		if (world.getDoor() != null) { // if there is a door
-			extract = extract + "\ndoor," + world.getDoor().getColumn() + "," + world.getDoor().getRow();
+		if (scene.getDoor() != null) { // if there is a door
+			extract = extract + "\ndoor," + scene.getDoor().getColumn() + "," + scene.getDoor().getRow();
 		}
 
 		return extract;

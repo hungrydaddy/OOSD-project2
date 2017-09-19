@@ -2,7 +2,7 @@ package project2.Elements.Characters.Player;
 
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
-import project2.Controllers.World;
+import project2.Controllers.Scene;
 import project2.Elements.BasicObject;
 import project2.Elements.Characters.Character;
 
@@ -10,8 +10,8 @@ public class Player extends Character{
 
     private Boolean playerDead = false;
 
-    public Player(World world) throws SlickException {
-        super(world);
+    public Player(Scene scene) throws SlickException {
+        super(scene);
         getTags().add(Extra.Tag.PLAYER);
         setObjectTile("player_left");
     }

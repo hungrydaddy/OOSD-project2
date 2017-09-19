@@ -2,14 +2,14 @@ package project2.Elements.Environment;
 
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
-import project2.Controllers.World;
+import project2.Controllers.Scene;
 import project2.Elements.BasicObject;
 import project2.Elements.Environment.Blocks.TNT;
 
 public class CrackedWall extends Wall {
 
-    public CrackedWall(World world) throws SlickException {
-        super(world);
+    public CrackedWall(Scene scene) throws SlickException {
+        super(scene);
         getTags().add(Extra.Tag.CRACKED);
         setObjectTile("cracked_wall");
     }

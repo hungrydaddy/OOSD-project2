@@ -2,7 +2,7 @@ package project2.Elements.Characters.Enemies;
 
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
-import project2.Controllers.World;
+import project2.Controllers.Scene;
 import project2.Elements.BasicCell;
 
 import java.util.Date;
@@ -14,8 +14,8 @@ public class Skeleton extends Enemy {
     private Date lastMove;
     private final int MOVE_INTERVAL = 1000;
 
-    public Skeleton(World world) throws SlickException {
-        super(world);
+    public Skeleton(Scene scene) throws SlickException {
+        super(scene);
         getTags().add(Extra.Tag.SKELETON);
         setObjectTile("skull");
     }

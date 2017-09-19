@@ -5,10 +5,10 @@
 package project2.Controllers;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import project2.Elements.BasicCell;
-import project2.Elements.BasicObject;
 import project2.Elements.Characters.Enemies.Mage;
 import project2.Elements.Characters.Enemies.Rogue;
 import project2.Elements.Characters.Enemies.Skeleton;
@@ -18,13 +18,10 @@ import project2.Elements.Environment.Blocks.Block;
 import project2.Elements.Environment.Blocks.Ice;
 import project2.Elements.Environment.Blocks.TNT;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class World {
+public class Scene {
 
 	// map info
 	private BasicCell[][] map;
@@ -35,40 +32,26 @@ public class World {
 
 
 	// objects under user control
-	private Game game;
+	private Level level;
 	private Player player;
 	private ArrayList<Target> targets = new ArrayList<>();
 	private ArrayList<Skeleton> skeletons = new ArrayList<>();
 	private ArrayList<Rogue> rogues = new ArrayList<>();
 	private ArrayList<Mage> mages = new ArrayList<>();
 	private ArrayList<Ice> ices = new ArrayList<>();
+	private TNT tnt;
 	private Door door;
 	private Switch mSwitch;
-
-	private ArrayList<BasicObject> lateRenderQueue = new ArrayList<>();
-
-
-
-	public World(String level, Game game) throws SlickException {
-		this.game = game;
-		ArrayList<String> lvlInfo = loadLevelFile(level);
-		setupOffsets(lvlInfo.get(0));
-		parseLevel(lvlInfo);
-	}
+	private Date explosionDate;
+	private final int EXPLOSION_DURATION = 400;
+	private Boolean usedTNT = false;
 
 
+	public Scene(Boolean usedTNT, Level level, String snapshot) throws SlickException {
+		this.level = level;
+		this.usedTNT = usedTNT;
 
-	public World(String level, Game game, String lastWorld) throws SlickException {
-		this.game = game;
-		ArrayList<String> lvlInfo = new ArrayList<>();
-		String[] lastWorldList = lastWorld.split("\n");
-
-		for (int i = 0;i < lastWorldList.length;i++) {
-			lvlInfo.add(lastWorldList[i]);
-		}
-
-		setupOffsets(lvlInfo.get(0));
-		parseLevel(lvlInfo);
+		parseLevel(snapshot);
 	}
 
 
@@ -76,30 +59,22 @@ public class World {
 
 	public void update(Input input, int delta) throws SlickException {
 
-		if (input.isKeyPressed(Input.KEY_R)) {
-			getGame().restartCurrentLevel();
-		}
-		if (input.isKeyPressed(Input.KEY_Z)) {
-			getGame().rewind();
-		}
-
-
 		Boolean playerMoved = false;
 		// updating the player, save if valid move
 		if (input.isKeyPressed(Input.KEY_UP)) {
-			getGame().saveLastMove();
+			getLevel().saveLastScene();
 			player.update(Extra.Directions.UP);
 			playerMoved = true;
 		} else if (input.isKeyPressed(Input.KEY_DOWN)) {
-			getGame().saveLastMove();
+			getLevel().saveLastScene();
 			player.update(Extra.Directions.DOWN);
 			playerMoved = true;
 		} else if (input.isKeyPressed(Input.KEY_LEFT)) {
-			getGame().saveLastMove();
+			getLevel().saveLastScene();
 			player.update(Extra.Directions.LEFT);
 			playerMoved = true;
 		} else if (input.isKeyPressed(Input.KEY_RIGHT)) {
-			getGame().saveLastMove();
+			getLevel().saveLastScene();
 			player.update(Extra.Directions.RIGHT);
 			playerMoved = true;
 		}
@@ -151,25 +126,9 @@ public class World {
 			}
 		}
 
-		// rendering things afterwards
-		for (int i = 0;i < lateRenderQueue.size(); i++) {
-			lateRenderQueue.get(i).render(g);
+		if (usedTNT()) { // render tnt after everything to make sure the effects display
+			displayExplosion();
 		}
-
-	}
-
-
-	// adding objects to the queue to render late
-	public void lateRenderAdd(BasicObject object) {
-		lateRenderQueue.add(object);
-	}
-
-	// remove from the queue
-	public void lateRenderClear() {
-		if (lateRenderQueue == null) {
-			return;
-		}
-		lateRenderQueue.clear();
 	}
 
 
@@ -186,28 +145,6 @@ public class World {
 
 
 
-	//
-	private ArrayList<String> loadLevelFile(String level) {
-		String lvlFilePath = "res/levels/" + level + ".lvl";
-		ArrayList<String> lvlInfo = new ArrayList<String>();
-		String line;
-
-		// try reading the csv file and append it to an array for later usage
-		try (BufferedReader reader = new BufferedReader(new FileReader(lvlFilePath))) {
-			while ((line = reader.readLine()) != null) {
-				lvlInfo.add(line);
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return lvlInfo;
-	}
-
-
-
 	public Boolean levelWon() {
 		for (int i = 0;i < targets.size();i++) {
 			if (!targets.get(i).hasBlock()) { // if any of the targets does not have a block
@@ -220,15 +157,14 @@ public class World {
 
 
 	// destroy this world
-	public void worldDestroy() {
-		game = null;
+	public void sceneDestroy() {
+		level = null;
 		player = null;
 		targets.clear();
 		targets = null;
 		door = null;
 		mSwitch = null;
-		lateRenderQueue.clear();
-		lateRenderQueue = null;
+		tnt = null;
 
 		for (int i = 0;i < height;i++) {
 			for (int j = 0;j < width;j++) {
@@ -243,13 +179,38 @@ public class World {
 
 
 
+	private void displayExplosion() throws SlickException {
+		if (tnt == null) {
+			return;
+		}
+
+		Date now = new Date();
+
+		if (explosionDate == null) {
+			explosionDate = now;
+		}
+
+		long timeSinceExplosion = new Date().getTime() - explosionDate.getTime();
+		Image explosionTile = new Image("res/explosion.png");
+		if (timeSinceExplosion < EXPLOSION_DURATION) {
+			explosionTile.draw(tnt.getCellOnDirection(Extra.Directions.LEFT).getColumn() * App.TILE_SIZE + X_offset, tnt.getCellOnDirection(Extra.Directions.UP).getRow() * App.TILE_SIZE + Y_offset);
+		}
+	}
 
 
 
 
 
 
-	public void parseLevel(ArrayList<String> lvlInfo) throws SlickException {
+
+	public void parseLevel(String snapshot) throws SlickException {
+		ArrayList<String> lvlInfo = new ArrayList<>();
+
+		for (int i = 0;i < snapshot.split("\n").length;i++) {
+			lvlInfo.add(snapshot.split("\n")[i]);
+		}
+
+		setupOffsets(lvlInfo.get(0));
 
 		map = new BasicCell[getHeight()][getWidth()];
 
@@ -316,13 +277,14 @@ public class World {
 					ices.add(ice);
 					break;
 				case "tnt":
-					if (getGame().tagBanned(Extra.Tag.TNT)) {
+					if (usedTNT) {
 						break;
 					}
 					TNT tnt = new TNT(this);
 					tnt.setCell(map[row][column]);
 					tnt.setParent(map[row][column].getObject().getLastChild());
 					tnt.getParent().stack(tnt);
+					this.tnt = tnt;
 					break;
 				case "skeleton":
 					Skeleton skeleton = new Skeleton(this);
@@ -375,8 +337,8 @@ public class World {
 		return width;
 	}
 
-	public Game getGame() {
-		return game;
+	public Level getLevel() {
+		return level;
 	}
 
 	public BasicCell[][] getMap() {
@@ -410,4 +372,15 @@ public class World {
 	public void addTarget(Target target) {
 		this.targets.add(target);
 	}
+
+	public Boolean usedTNT() {
+		if (tnt == null) { // if no tnt in the scene
+			return false;
+		}
+		if (tnt.usedTNT()) {
+			return true;
+		}
+		return false;
+	}
+
 }

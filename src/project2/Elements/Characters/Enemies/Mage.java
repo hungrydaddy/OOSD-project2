@@ -2,12 +2,12 @@ package project2.Elements.Characters.Enemies;
 
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
-import project2.Controllers.World;
+import project2.Controllers.Scene;
 
 public class Mage extends Enemy {
 
-    public Mage(World world) throws SlickException {
-        super(world);
+    public Mage(Scene scene) throws SlickException {
+        super(scene);
         getTags().add(Extra.Tag.MAGE);
         setObjectTile("mage");
     }
@@ -17,8 +17,8 @@ public class Mage extends Enemy {
     @Override
     public void update(Extra.Directions direction) throws SlickException {
         // the method on specs to track down the player
-        int distX = (getColumn() - getWorld().getPlayer().getColumn());
-        int distY = (getRow() - getWorld().getPlayer().getRow());
+        int distX = (getColumn() - getScene().getPlayer().getColumn());
+        int distY = (getRow() - getScene().getPlayer().getRow());
 
         int sgnX;
         int sgnY;

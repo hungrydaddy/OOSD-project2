@@ -2,14 +2,14 @@ package project2.Elements.Characters;
 
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
-import project2.Controllers.World;
+import project2.Controllers.Scene;
 import project2.Elements.BasicObject;
 
 
 abstract public class Character extends BasicObject {
 
-    public Character(World world) throws SlickException {
-        super(world);
+    public Character(Scene scene) throws SlickException {
+        super(scene);
     }
 
 

@@ -2,14 +2,14 @@ package project2.Elements.Characters.Enemies;
 
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
-import project2.Controllers.World;
+import project2.Controllers.Scene;
 
 public class Rogue extends Enemy {
 
     private Extra.Directions movingDirection;
 
-    public Rogue(World world) throws SlickException {
-        super(world);
+    public Rogue(Scene scene) throws SlickException {
+        super(scene);
         getTags().add(Extra.Tag.ROGUE);
         setObjectTile("rogue");
         movingDirection = Extra.Directions.LEFT;

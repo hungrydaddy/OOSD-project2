@@ -10,14 +10,14 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import project2.Controllers.App;
 import project2.Controllers.Extra;
-import project2.Controllers.World;
+import project2.Controllers.Scene;
 
 import java.util.ArrayList;
 
 
 abstract public class BasicObject {
 
-    private World world;
+    private Scene scene;
     private Image objectTile;
     private BasicCell cell;
     private BasicObject parent;
@@ -25,8 +25,8 @@ abstract public class BasicObject {
     private ArrayList<Extra.Tag> tags;
 
 
-    public BasicObject(World world) {
-        this.world = world;
+    public BasicObject(Scene scene) {
+        this.scene = scene;
         this.tags = new ArrayList<>();
     }
 
@@ -39,7 +39,7 @@ abstract public class BasicObject {
 
     public void render(Graphics g) {
         if (objectTile != null) { // render this tile first
-            objectTile.draw(getColumn() * App.TILE_SIZE + world.X_offset, getRow() * App.TILE_SIZE + world.Y_offset);
+            objectTile.draw(getColumn() * App.TILE_SIZE + scene.X_offset, getRow() * App.TILE_SIZE + scene.Y_offset);
         }
         if (child != null) { // if something is stacked on this object, continue to render it
             child.render(g);
@@ -96,28 +96,28 @@ abstract public class BasicObject {
                 if (getRow() - 1 < 0) {
                     targetCell = null;
                 } else {
-                    targetCell = world.getMap()[getRow() - 1][getColumn()];
+                    targetCell = scene.getMap()[getRow() - 1][getColumn()];
                 }
                 break;
             case DOWN:
-                if (getRow() + 1 >= world.getHeight()) {
+                if (getRow() + 1 >= scene.getHeight()) {
                     targetCell = null;
                 } else {
-                    targetCell = world.getMap()[getRow() + 1][getColumn()];
+                    targetCell = scene.getMap()[getRow() + 1][getColumn()];
                 }
                 break;
             case RIGHT:
-                if (getColumn() + 1 >= world.getWidth()) {
+                if (getColumn() + 1 >= scene.getWidth()) {
                     targetCell = null;
                 } else {
-                    targetCell = world.getMap()[getRow()][getColumn() + 1];
+                    targetCell = scene.getMap()[getRow()][getColumn() + 1];
                 }
                 break;
             case LEFT:
                 if (getColumn() - 1 < 0) {
                     targetCell = null;
                 } else {
-                    targetCell = world.getMap()[getRow()][getColumn() - 1];
+                    targetCell = scene.getMap()[getRow()][getColumn() - 1];
                 }
                 break;
             default:
@@ -148,7 +148,7 @@ abstract public class BasicObject {
             child.objectDestroy();
             child = null;
         }
-        world = null;
+        scene = null;
         cell = null;
         parent = null;
         objectTile = null;
@@ -199,8 +199,8 @@ abstract public class BasicObject {
         return tags;
     }
 
-    public World getWorld() {
-        return world;
+    public Scene getScene() {
+        return scene;
     }
 
     public BasicCell getCell() {

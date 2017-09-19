@@ -2,13 +2,13 @@ package project2.Elements.Environment.Blocks;
 
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
-import project2.Controllers.World;
+import project2.Controllers.Scene;
 import project2.Elements.BasicObject;
 
 public class Block extends BasicObject {
 
-    public Block(World world) throws SlickException {
-        super(world);
+    public Block(Scene scene) throws SlickException {
+        super(scene);
         getTags().add(Extra.Tag.BLOCK);
         setObjectTile("stone");
     }

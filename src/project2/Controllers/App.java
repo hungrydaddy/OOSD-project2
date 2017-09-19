@@ -13,7 +13,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Input;
 
 /**
- * Main class for the game.
+ * Main class for the level.
  * Handles initialisation, input and rendering.
  */
 public class App extends BasicGame
@@ -25,7 +25,7 @@ public class App extends BasicGame
     /** size of the tiles, in pixels */
     public static final int TILE_SIZE = 32;
 
-    private Game game;
+    private Game currentGame;
 
     public App()
     {    	
@@ -36,11 +36,11 @@ public class App extends BasicGame
     public void init(GameContainer gc)
     throws SlickException
     {
-    	game = new Game();
+        currentGame = new Game();
     }
 
-    /** Update the game state for a frame.
-     * @param gc The Slick game container object.
+    /** Update the level state for a frame.
+     * @param gc The Slick level container object.
      * @param delta Time passed since last frame (milliseconds).
      */
     @Override
@@ -49,20 +49,20 @@ public class App extends BasicGame
     {
         // Get data about the current input (keyboard state).
         Input input = gc.getInput();
-        game.update(input, delta);
+        currentGame.update(input, delta);
     }
 
-    /** Render the entire screen, so it reflects the current game state.
-     * @param gc The Slick game container object.
+    /** Render the entire screen, so it reflects the current level state.
+     * @param gc The Slick level container object.
      * @param g The Slick graphics object, used for drawing.
      */
     public void render(GameContainer gc, Graphics g)
     throws SlickException
     {
-    	game.render(g);
+    	currentGame.render(g);
     }
 
-    /** Start-up method. Creates the game and runs it.
+    /** Start-up method. Creates the level and runs it.
      * @param args Command-line arguments (ignored).
      */
     public static void main(String[] args)

@@ -2,13 +2,13 @@ package project2.Elements.Environment;
 
 import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
-import project2.Controllers.World;
+import project2.Controllers.Scene;
 import project2.Elements.BasicObject;
 
 
 public class Switch extends Target {
-    public Switch(World world) throws SlickException {
-        super(world);
+    public Switch(Scene scene) throws SlickException {
+        super(scene);
         getTags().add(Extra.Tag.SWITCH);
         setObjectTile("switch");
     }
