@@ -21,40 +21,44 @@ public class Mage extends Enemy {
         int distX = (getColumn() - getScene().getPlayer().getColumn());
         int distY = (getRow() - getScene().getPlayer().getRow());
 
-        int sgnX;
-        int sgnY;
+        Extra.Directions directionX;
+        Extra.Directions directionY;
+
         if (distX < 0) {
-            sgnX = -1;
+            directionX = Extra.Directions.RIGHT;
         } else {
-            sgnX = 1;
+            directionX = Extra.Directions.LEFT;
         }
 
         if (distY < 0) {
-            sgnY = -1;
+            directionY = Extra.Directions.DOWN;
         } else {
-            sgnY = 1;
+            directionY = Extra.Directions.UP;
         }
 
-        if (Math.abs(distX) > Math.abs(distY)) {
+
+        if (Math.abs(distX) > Math.abs(distY) && canMoveInDirection(directionX)) {
             // move in X direction
-            for (int i = 0;i < Math.abs(distX);i++) {
-                if (sgnX == -1) { // player on the right, move right
-                    move(Extra.Directions.RIGHT);
-                } else {
-                    move(Extra.Directions.LEFT);
-                }
-            }
-        } else {
+            move(directionX);
+        } else if (canMoveInDirection(directionY)) {
             // move in Y direction
-            for (int i = 0;i < Math.abs(distY);i++) {
-                if (sgnY == -1) { // player on the bottom, move down
-                    move(Extra.Directions.DOWN);
-                } else {
-                    move(Extra.Directions.UP);
-                }
-            }
+            move(directionY);
         }
     }
+
+
+
+
+    // a function to check if mage can move
+    private Boolean canMoveInDirection(Extra.Directions direction) {
+        Boolean hasWall = getCellOnDirection(direction).getObject().childrenHaveTag(Extra.Tag.WALL);
+        Boolean hasBlock = getCellOnDirection(direction).getObject().childrenHaveTag(Extra.Tag.BLOCK);
+        if (hasWall || hasBlock) {
+            return false;
+        }
+        return true;
+    }
+
 
 
 }

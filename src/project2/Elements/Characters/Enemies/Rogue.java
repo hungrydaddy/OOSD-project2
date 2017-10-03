@@ -4,6 +4,7 @@ import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
 import project2.Controllers.Scene;
 import project2.Elements.BasicCell;
+import project2.Elements.BasicObject;
 
 public class Rogue extends Enemy {
 
@@ -28,9 +29,6 @@ public class Rogue extends Enemy {
     }
 
 
-
-
-
     private void changeDirection() {
         if (movingDirection == Extra.Directions.LEFT) {
             movingDirection = Extra.Directions.RIGHT;
@@ -38,7 +36,5 @@ public class Rogue extends Enemy {
             movingDirection = Extra.Directions.LEFT;
         }
     }
-
-
 
 }

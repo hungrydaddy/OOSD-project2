@@ -4,6 +4,7 @@ import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
 import project2.Controllers.Scene;
 import project2.Elements.BasicCell;
+import project2.Elements.BasicObject;
 
 import java.util.Date;
 
@@ -54,7 +55,14 @@ public class Skeleton extends Enemy {
     }
 
 
-
+    @Override
+    public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException {
+        super.contact(object, direction);
+        if (object.hasTag(Extra.Tag.BLOCK)) {
+            return false;
+        }
+        return true;
+    }
 
     private void changeDirection() {
         if (movingDirection == Extra.Directions.UP) {

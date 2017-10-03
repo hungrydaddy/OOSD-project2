@@ -20,7 +20,12 @@ abstract public class Enemy extends Character {
         if (object.hasTag(Extra.Tag.PLAYER)) { // if player contacted with an enemy
             getScene().getPlayer().playerDied();
         }
-        super.contact(object, direction);
-        return true;
+        if (object.hasTag(Extra.Tag.ENEMY)) { // enemy can stack on enemy
+            stack(object);
+            return true;
+        }
+        return false;
     }
+
+
 }

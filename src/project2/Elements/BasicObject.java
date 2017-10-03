@@ -42,8 +42,8 @@ abstract public class BasicObject {
         if (objectTile != null) { // render this tile first
             objectTile.draw(getColumn() * App.TILE_SIZE + scene.X_offset, getRow() * App.TILE_SIZE + scene.Y_offset);
         }
-        if (child != null) { // if something is stacked on this object, continue to render it
-            child.render(g);
+        if (getChild() != null) { // if something is stacked on this object, continue to render it
+            getChild().render(g);
         }
     }
 
@@ -67,7 +67,13 @@ abstract public class BasicObject {
 
     // move off the parent
     public void unstack() throws SlickException {
-        getParent().setChild(null);
+        if (getChild() != null) { // if has child, set child's parent to this object's parent
+            getChild().setParent(getParent());
+            getParent().setChild(getChild());
+            setChild(null);
+        } else {
+            getParent().setChild(null);
+        }
         setParent(null);
     }
 
