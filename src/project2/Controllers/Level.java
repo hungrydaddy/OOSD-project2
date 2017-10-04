@@ -21,12 +21,23 @@ public class Level {
 
 
     public Level(int lvl_num) throws SlickException {
-        currentScene = new Scene(false, this, Extra.loadLevelFile(lvl_num));
+        currentScene = new Scene(false, Extra.loadLevelFile(lvl_num));
         sceneSnapshots.add(Extra.snapshot(currentScene)); // adding the initial scene
     }
 
 
+    public void render(Graphics g) throws SlickException {
+        currentScene.render(g);
 
+        // showing the number of moves
+        g.drawString("Moves: " + getNumberOfMoves(), 20.0f, 20.0f);
+    }
+
+
+
+    /**
+     * updates for a level, handles key input for player, detects if player died or TNT used
+     */
     public void update(Input input) throws SlickException {
         if (input.isKeyPressed(Input.KEY_R)) {
             rewind(true);
@@ -58,7 +69,6 @@ public class Level {
 
 
 
-
         if (!update) {
             return;
         } else { // when updating
@@ -74,30 +84,12 @@ public class Level {
     }
 
 
-    public void render(Graphics g) throws SlickException {
-        currentScene.render(g);
-
-        // showing the number of moves
-        g.drawString("Moves: " + getNumberOfMoves(), 20.0f, 20.0f);
-    }
 
 
 
-
-
-
-
-
-
-    /* helper functions */
-
-    private int getNumberOfMoves() {
-        return sceneSnapshots.size() - 1;
-    }
-
-
-
-    // go backwards
+    /** goes one step backward, or even restart
+     * @param restart a state, whether to restart the whole level or to go back one step
+     */
     public void rewind(Boolean restart) throws SlickException {
         if (!restart && sceneSnapshots.size() == 1) { // if there is only the initial scene
             return;
@@ -108,12 +100,12 @@ public class Level {
         // restoring the last movement
         if (!restart) { // delete the last move
             String snapshot = sceneSnapshots.get(sceneSnapshots.size() - 1);
-            currentScene = new Scene(usedTNT, this, snapshot);
+            currentScene = new Scene(usedTNT, snapshot);
             sceneSnapshots.remove(sceneSnapshots.size() - 1);
         } else { // restart the level
             usedTNT = false;
             String snapshot = sceneSnapshots.get(0);
-            currentScene = new Scene(usedTNT, this, snapshot);
+            currentScene = new Scene(usedTNT, snapshot);
             sceneSnapshots.clear();
             sceneSnapshots.add(snapshot);
         }
@@ -122,8 +114,10 @@ public class Level {
 
 
 
-
-    public void levelDestory() {
+    /**
+     * destroy the current level, free up the memory
+     */
+    public void levelDestroy() {
         sceneSnapshots.clear();
         sceneSnapshots = null;
         currentScene.sceneDestroy();
@@ -131,15 +125,20 @@ public class Level {
     }
 
 
-
+    /**
+     * detects if the current level is won, will get inside current scene to determine
+     */
     public Boolean levelWon() {
         return currentScene.levelWon();
     }
 
 
-
-    public void saveLastScene() {
+    private void saveLastScene() {
         sceneSnapshots.add(Extra.snapshot(currentScene));
     }
 
+
+    private int getNumberOfMoves() {
+        return sceneSnapshots.size() - 1;
+    }
 }

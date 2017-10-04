@@ -23,16 +23,15 @@ import java.util.Date;
 
 public class Scene {
 
-	// map info
+	// map properties
 	private BasicCell[][] map;
-	public Integer X_offset;
-	public Integer Y_offset;
+	private Integer X_offset;
+	private Integer Y_offset;
 	private Integer height;
 	private Integer width;
 
 
 	// objects under user control
-	private Level level;
 	private Player player;
 	private ArrayList<Target> targets = new ArrayList<>();
 	private ArrayList<Skeleton> skeletons = new ArrayList<>();
@@ -47,17 +46,18 @@ public class Scene {
 	private Boolean usedTNT = false;
 
 
-	public Scene(Boolean usedTNT, Level level, String snapshot) throws SlickException {
-		this.usedTNT = usedTNT;
 
+	public Scene(Boolean usedTNT, String snapshot) throws SlickException {
+		this.usedTNT = usedTNT;
 		parseLevel(snapshot);
 	}
 
 
 
-
+	/** updates for the scene, handles movable units and doors and switches
+	 * @param playerMoved a state indicating whether the player moved, some units' movements are depending on player
+	 */
 	public void update(Boolean playerMoved) throws SlickException {
-
 		// updating the skeletons
 		for (int i = 0;i < skeletons.size();i++) {
 			skeletons.get(i).update(null);
@@ -97,6 +97,9 @@ public class Scene {
 
 
 
+	/** renders the entire map, branching up to every single object stacked on each cell, also handles tnt effect
+	 * @param g graphics from slick lib
+	 */
 	public void render(Graphics g) throws SlickException {
 		// iterate thru the map to render every object and terrain
 		for (int i = 0;i < height;i++) {
@@ -112,21 +115,14 @@ public class Scene {
 
 
 
-	// calculation of offsets to centre the map
-	private void setupOffsets(String sizeInfo) throws SlickException {
-		String[] mapSize = sizeInfo.split(",");
-		width = Integer.parseInt(mapSize[0]);
-		height = Integer.parseInt(mapSize[1]);
-
-		X_offset = (App.SCREEN_WIDTH - width * App.TILE_SIZE) / 2;
-		Y_offset = (App.SCREEN_HEIGHT - height * App.TILE_SIZE) / 2;
-	}
 
 
-
+	/** checks if every target has a block
+	 * @return whether level is won or not
+	 */
 	public Boolean levelWon() {
 		for (int i = 0;i < targets.size();i++) {
-			if (!targets.get(i).hasBlock()) { // if any of the targets does not have a block
+			if (!targets.get(i).childrenHaveTag(Extra.Tag.BLOCK)) { // if any of the targets does not have a block
 				return false;
 			}
 		}
@@ -135,9 +131,11 @@ public class Scene {
 
 
 
-	// destroy this world
+
+	/**
+	 * destroys the current scene and free up the memory
+	 */
 	public void sceneDestroy() {
-		level = null;
 		player = null;
 		targets.clear();
 		targets = null;
@@ -155,6 +153,18 @@ public class Scene {
 		map = null;
 	}
 
+
+
+
+	// calculation of offsets to centre the map
+	private void setupOffsets(String sizeInfo) throws SlickException {
+		String[] mapSize = sizeInfo.split(",");
+		width = Integer.parseInt(mapSize[0]);
+		height = Integer.parseInt(mapSize[1]);
+
+		X_offset = (App.SCREEN_WIDTH - width * App.TILE_SIZE) / 2;
+		Y_offset = (App.SCREEN_HEIGHT - height * App.TILE_SIZE) / 2;
+	}
 
 
 
@@ -179,10 +189,8 @@ public class Scene {
 
 
 
-
-
-
-	public void parseLevel(String snapshot) throws SlickException {
+	// parse the level from snapshot for the current scene
+	private void parseLevel(String snapshot) throws SlickException {
 		ArrayList<String> lvlInfo = new ArrayList<>();
 
 		for (int i = 0;i < snapshot.split("\n").length;i++) {
@@ -299,7 +307,8 @@ public class Scene {
 
 
 
-	/* encapsulations */
+
+	/* getters and setters */
 
 	public Integer getHeight() {
 		return height;
@@ -311,6 +320,14 @@ public class Scene {
 
 	public BasicCell[][] getMap() {
 		return map;
+	}
+
+	public Integer getX_offset() {
+		return X_offset;
+	}
+
+	public Integer getY_offset() {
+		return Y_offset;
 	}
 
 	public void setPlayer(Player player) {

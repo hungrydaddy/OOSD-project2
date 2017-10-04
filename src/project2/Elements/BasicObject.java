@@ -40,7 +40,9 @@ abstract public class BasicObject {
 
     public void render(Graphics g) {
         if (objectTile != null) { // render this tile first
-            objectTile.draw(getColumn() * App.TILE_SIZE + scene.X_offset, getRow() * App.TILE_SIZE + scene.Y_offset);
+            float xPosition = getColumn() * App.TILE_SIZE + scene.getX_offset();
+            float YPosition = getRow() * App.TILE_SIZE + scene.getY_offset();
+            objectTile.draw(xPosition, YPosition);
         }
         if (getChild() != null) { // if something is stacked on this object, continue to render it
             getChild().render(g);

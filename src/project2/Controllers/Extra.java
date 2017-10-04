@@ -15,11 +15,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Extra {
-	// Converts a world coordinate to a tile coordinate,
-	// and returns if that location is a blocked tile
 
 
-
+	/**
+	 * tag combinations are identifiers of different objects
+	 */
 	public enum Tag {
 		PLAYER, ENEMY,
 		SKELETON, ROGUE, MAGE,
@@ -28,6 +28,9 @@ public class Extra {
 	}
 
 
+	/**
+	 * 4 directions in the game
+	 */
 	public enum Directions {
 		LEFT, RIGHT, UP, DOWN
 	}
@@ -35,6 +38,10 @@ public class Extra {
 
 
 
+	/**
+	 * @param lvl_num the level number
+	 * @return the level file in the form of a string
+	 */
 	public static String loadLevelFile(int lvl_num) {
 		String lvlFilePath = "res/levels/" + lvl_num + ".lvl";
 		String output = "";
@@ -59,7 +66,10 @@ public class Extra {
 
 
 
-	// taking a snaoshot of the current scene
+	/** taking a snapshot of the current scene
+	 * @param scene the current scene
+	 * @return snapshot of the scene, format compatible with the level file, can be directly loaded
+	 */
 	public static String snapshot(Scene scene) {
 		String extract = "" + scene.getWidth() + "," + scene.getHeight();
 
@@ -91,6 +101,8 @@ public class Extra {
 
 
 
+
+	// translates an object to string format compatible with level file
 	private static String translateObjectToString(BasicObject object) {
 		if (object == null) {
 			return "";
@@ -109,11 +121,11 @@ public class Extra {
 		} else if (object.hasTag(Tag.WALL)) {
 			output += "wall";
 		} else if (object.hasTag(Tag.DOOR)) {
-			return "";
 			// deal with the door outside of this function
-		} else if (object.hasTag(Tag.ICE)) {
 			return "";
+		} else if (object.hasTag(Tag.ICE)) {
 			// deal with the ices outside of this function
+			return "";
 		} else if (object.hasTag(Tag.TNT)) {
 			output += "tnt";
 		} else if (object.hasTag(Tag.BLOCK)) {
@@ -125,8 +137,8 @@ public class Extra {
 		} else if (object.hasTag(Tag.MAGE)) {
 			output += "mage";
 		} else if (object.hasTag(Tag.PLAYER)) {
-			return "";
 			// deal with the player outside of this function
+			return "";
 		}
 
 
