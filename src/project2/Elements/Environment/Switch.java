@@ -8,16 +8,11 @@ import project2.Elements.BasicObject;
 
 
 public class Switch extends Target {
+
+    // this object can turn on or off the floor
     public Switch(Scene scene, BasicCell cell) throws SlickException {
         super(scene, cell);
         getTags().add(Extra.Tag.SWITCH);
         setObjectTile("switch");
-    }
-
-
-
-    @Override
-    public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException {
-        return super.contact(object, direction);
     }
 }

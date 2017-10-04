@@ -16,26 +16,26 @@ public class Floor extends BasicObject {
         setObjectTile("floor");
     }
 
-    @Override
-    public void update(Extra.Directions direction) throws SlickException {
-    }
 
-
-
+    /** handles contacts between the incoming object and the current object -- floor
+     * @param object the incoming object
+     * @param direction the direction that the object is moving towards
+     * @return Boolean, if the current object can be pushed away
+     */
     @Override
     public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException {
-        Boolean canStack = true;
+        Boolean canMove = true;
 
         // first collide with the child
         if (getChild() != null) {
-            canStack = getChild().contact(object, direction);
+            canMove = getChild().contact(object, direction);
         }
 
         // stack up this object
-        if (getChild() == null && canStack) {
+        if (getChild() == null && canMove) {
             stack(object);
         }
 
-        return canStack;
+        return canMove;
     }
 }

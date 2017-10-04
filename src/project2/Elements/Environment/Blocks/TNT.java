@@ -24,11 +24,15 @@ public class TNT extends Block {
 
 
 
-
+    /** @return if the tnt was exploded or not
+     */
     public Boolean usedTNT() {
         return this.exploded;
     }
 
+
+    /** triggers the explosion effect, and unstack the object
+     */
     public void explode() throws SlickException {
         exploded = true;
         unstack();

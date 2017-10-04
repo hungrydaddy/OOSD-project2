@@ -1,3 +1,7 @@
+/*
+* 100% work by Minghao Huang (Austin) StudentId: 813072 The University of Melbourne
+* */
+
 package project2.Elements;
 
 import org.newdawn.slick.Graphics;
@@ -18,7 +22,8 @@ public class BasicCell {
     }
 
 
-    // renders both the terrain and occpuied object
+    /** renders the objects of the current cell
+     */
     public void render(Graphics g) {
         if (object != null) {
             object.render(g);
@@ -27,7 +32,8 @@ public class BasicCell {
 
 
 
-    // destroy this cell
+    /** destroys this cell and free the memory
+     */
     public void cellDestroy() {
         if (getObject() != null) {
             getObject().objectDestroy();
@@ -37,6 +43,9 @@ public class BasicCell {
 
 
 
+
+
+    /* getters and setters */
     public void setObject(BasicObject object) {
         this.object = object;
         object.setCell(this);

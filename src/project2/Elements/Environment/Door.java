@@ -14,12 +14,14 @@ public class Door extends BasicObject {
         setObjectTile("door");
     }
 
-    @Override
-    public void update(Extra.Directions direction) throws SlickException {
-
-    }
 
 
+
+    /** handles contacts between the incoming object and the current object
+     * @param object the incoming object
+     * @param direction the direction that the object is moving towards
+     * @return false, door cannot be pushed away
+     */
     @Override
     public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException {
         return false;
@@ -31,7 +33,9 @@ public class Door extends BasicObject {
 
 
 
-    // detach the door
+    /**
+     * hides the door by detaching it temporarily
+     */
     public void doorHide() {
         if (getParent() != null) {
             getParent().setChild(null);
@@ -40,7 +44,10 @@ public class Door extends BasicObject {
     }
 
 
-    // attach the door
+
+    /**
+     * shows the door
+     */
     public void doorShow() {
         if (getParent() == null) {
             this.setParent(getCell().getObject().getLastChild());

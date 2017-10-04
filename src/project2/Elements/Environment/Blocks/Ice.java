@@ -24,7 +24,9 @@ public class Ice extends Block {
     }
 
 
-
+    /** handles updates for ice movements
+     * @param direction the direction that the ice is moving towards
+     */
     @Override
     public void update(Extra.Directions direction) throws SlickException {
         if (!sliding) {
@@ -51,6 +53,9 @@ public class Ice extends Block {
 
 
 
+    /** move one step towards different directions, modified for ice movements
+     * @param direction the direction the object is moving towards
+     */
     @Override
     public Boolean move(Extra.Directions direction) throws SlickException {
         sliding = true;

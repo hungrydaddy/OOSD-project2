@@ -34,10 +34,27 @@ abstract public class BasicObject {
 
 
 
+    /** handles updates for current object
+     * @param direction the direction that the object is moving towards
+     */
+    public void update(Extra.Directions direction) throws SlickException {
+        // do nothing by default
+    }
 
-    abstract public void update(Extra.Directions direction) throws SlickException;
 
 
+
+    /** handles contacts between the incoming object and the current object
+     * @param object the incoming object
+     * @param direction the direction that the object is moving towards
+     * @return Boolean, if the current object can be pushed away
+     */
+    abstract public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException;
+
+
+    /** renders the current object, from a tile file.
+     * @param g The Slick graphics object, used for drawing.
+     */
     public void render(Graphics g) {
         if (objectTile != null) { // render this tile first
             float xPosition = getColumn() * App.TILE_SIZE + scene.getX_offset();
@@ -52,11 +69,19 @@ abstract public class BasicObject {
 
 
 
+    /** move one step towards different directions
+     * @param direction the direction the object is moving towards
+     */
+    public Boolean move(Extra.Directions direction) throws SlickException {
+        BasicCell destination = getCellOnDirection(direction);
+        return destination.getObject().contact(this, direction);
+    }
 
 
 
-    /* internal functions */
-
+    /** stacks an object onto the current object
+     * @param object stacks this input object onto the current object
+     */
     public void stack(BasicObject object) throws SlickException {
         if (getChild() == null) {
             object.unstack();
@@ -68,7 +93,7 @@ abstract public class BasicObject {
 
 
     // move off the parent
-    public void unstack() throws SlickException {
+    protected void unstack() throws SlickException {
         if (getChild() != null) { // if has child, set child's parent to this object's parent
             getChild().setParent(getParent());
             getParent().setChild(getChild());
@@ -81,22 +106,14 @@ abstract public class BasicObject {
 
 
 
-    // moving towards different directions
-    public Boolean move(Extra.Directions direction) throws SlickException {
-        BasicCell destination = getCellOnDirection(direction);
-        return destination.getObject().contact(this, direction);
-    }
 
 
 
 
-    abstract public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException;
-
-
-
-
-
-    // get a cell in a direction
+    /** fetches the cell on a direction relative to the current object
+     * @param direction 4 directions to choose
+     * @return a cell object, can be used for further purposes
+     */
     public BasicCell getCellOnDirection(Extra.Directions direction) {
         BasicCell targetCell;
 
@@ -140,6 +157,10 @@ abstract public class BasicObject {
 
 
 
+    /** detects if any children to this object has a specific tag
+     * @param tag which tag to check
+     * @return whether any children has this tag or not
+     */
     public Boolean childrenHaveTag(Extra.Tag tag) {
         if (hasTag(tag)) {
             return true;
@@ -151,7 +172,9 @@ abstract public class BasicObject {
 
 
 
-    // destroy this object
+    /**
+     * destroys this object and free the memory by dereferencing
+     */
     public void objectDestroy() {
         if (child != null) {
             child.objectDestroy();
@@ -168,7 +191,9 @@ abstract public class BasicObject {
 
 
 
-    /* encapsulations */
+
+
+    /* getters and setters */
     public Integer getColumn() {
         return getCell().getColumn();
     }

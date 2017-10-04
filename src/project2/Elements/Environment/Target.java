@@ -9,34 +9,11 @@ import project2.Elements.BasicObject;
 
 public class Target extends Floor {
 
-
+    // this object determines whether the game is won or not
     public Target(Scene scene, BasicCell cell) throws SlickException {
         super(scene, cell);
         getTags().add(Extra.Tag.TARGET);
         setObjectTile("target");
     }
 
-
-    @Override
-    public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException {
-        return super.contact(object, direction);
-    }
-
-
-
-
-
-
-
-
-
-
-    public Boolean hasBlock() {
-        if (getChild() == null) {
-            return false;
-        } else if (getChild().hasTag(Extra.Tag.BLOCK)) {
-            return true;
-        }
-        return false;
-    }
 }
