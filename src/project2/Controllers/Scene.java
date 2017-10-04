@@ -71,7 +71,7 @@ public class Scene {
 
 		// door toggle
 		if (getSwitch() != null && getDoor() != null) {
-			if (getSwitch().hasBlock()) {
+			if (getSwitch().childrenHaveTag(Extra.Tag.BLOCK)) {
 				getDoor().doorHide();
 			} else {
 				getDoor().doorShow();

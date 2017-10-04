@@ -24,7 +24,6 @@ public class Block extends BasicObject {
         if (object.hasTag(Extra.Tag.ICE)) {
             return false;
         }
-        move(direction);
-        return true;
+        return move(direction);
     }
 }

@@ -31,8 +31,6 @@ public class Door extends BasicObject {
 
 
 
-
-
     // detach the door
     public void doorHide() {
         if (getParent() != null) {
@@ -45,7 +43,7 @@ public class Door extends BasicObject {
     // attach the door
     public void doorShow() {
         if (getParent() == null) {
-            this.setParent(getCell().getObject());
+            this.setParent(getCell().getObject().getLastChild());
             getParent().setChild(this);
         }
     }

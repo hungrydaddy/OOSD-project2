@@ -18,7 +18,6 @@ public class Switch extends Target {
 
     @Override
     public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException {
-        super.contact(object, direction);
-        return true;
+        return super.contact(object, direction);
     }
 }

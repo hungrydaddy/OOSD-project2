@@ -24,7 +24,6 @@ public class Rogue extends Enemy {
         // auto movement for rogue
         if (!move(movingDirection)) {
             changeDirection();
-            move(movingDirection);
         }
     }
 
