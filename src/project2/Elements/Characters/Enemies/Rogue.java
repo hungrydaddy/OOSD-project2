@@ -4,7 +4,6 @@ import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
 import project2.Controllers.Scene;
 import project2.Elements.BasicCell;
-import project2.Elements.BasicObject;
 
 public class Rogue extends Enemy {
 
@@ -19,13 +18,17 @@ public class Rogue extends Enemy {
 
 
 
+    /** handles movements update for the rogue, and direction changing
+     * @throws SlickException
+     */
     @Override
-    public void update(Extra.Directions direction) throws SlickException {
+    public void update() throws SlickException {
         // auto movement for rogue
         if (!move(movingDirection)) {
             changeDirection();
         }
     }
+
 
 
     private void changeDirection() {

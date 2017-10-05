@@ -4,7 +4,6 @@ import org.newdawn.slick.SlickException;
 import project2.Controllers.Extra;
 import project2.Controllers.Scene;
 import project2.Elements.BasicCell;
-import project2.Elements.BasicObject;
 
 
 public class Switch extends Target {
@@ -14,5 +13,21 @@ public class Switch extends Target {
         super(scene, cell);
         getTags().add(Extra.Tag.SWITCH);
         setObjectTile("switch");
+    }
+
+
+
+    /** handles updates, door show and door hide
+     * @throws SlickException
+     */
+    @Override
+    public void update() throws SlickException {
+        if (hasBlock()) {
+            getScene().getDoor().doorHide();
+        } else {
+            getScene().getDoor().doorShow();
+        }
+
+        super.update();
     }
 }

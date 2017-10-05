@@ -25,10 +25,9 @@ public class Ice extends Block {
 
 
     /** handles updates for ice movements
-     * @param direction the direction that the ice is moving towards
      */
     @Override
-    public void update(Extra.Directions direction) throws SlickException {
+    public void update() throws SlickException {
         if (!sliding) {
             lastStaticPostion = getCell();
             return;

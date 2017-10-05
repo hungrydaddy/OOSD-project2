@@ -21,6 +21,7 @@ public class Door extends BasicObject {
      * @param object the incoming object
      * @param direction the direction that the object is moving towards
      * @return false, door cannot be pushed away
+     * @throws SlickException
      */
     @Override
     public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException {
@@ -50,7 +51,7 @@ public class Door extends BasicObject {
      */
     public void doorShow() {
         if (getParent() == null) {
-            this.setParent(getCell().getObject().getLastChild());
+            this.setParent(getCell().getRootObject().getLastChild());
             getParent().setChild(this);
         }
     }

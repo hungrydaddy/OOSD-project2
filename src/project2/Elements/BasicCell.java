@@ -10,12 +10,12 @@ import org.newdawn.slick.SlickException;
 public class BasicCell {
 
 
-    private BasicObject object;
+    private BasicObject rootObject;
     private Integer column;
     private Integer row;
 
 
-    // constructor
+
     public BasicCell(Integer row, Integer column) throws SlickException {
         this.column = column;
         this.row = row;
@@ -25,8 +25,8 @@ public class BasicCell {
     /** renders the objects of the current cell
      */
     public void render(Graphics g) {
-        if (object != null) {
-            object.render(g);
+        if (rootObject != null) {
+            rootObject.render(g);
         }
     }
 
@@ -35,9 +35,9 @@ public class BasicCell {
     /** destroys this cell and free the memory
      */
     public void cellDestroy() {
-        if (getObject() != null) {
-            getObject().objectDestroy();
-            object = null;
+        if (getRootObject() != null) {
+            getRootObject().objectDestroy();
+            rootObject = null;
         }
     }
 
@@ -45,14 +45,15 @@ public class BasicCell {
 
 
 
+
     /* getters and setters */
-    public void setObject(BasicObject object) {
-        this.object = object;
+    public void setRootObject(BasicObject object) {
+        this.rootObject = object;
         object.setCell(this);
     }
 
-    public BasicObject getObject() {
-        return object;
+    public BasicObject getRootObject() {
+        return rootObject;
     }
 
     public Integer getColumn() {

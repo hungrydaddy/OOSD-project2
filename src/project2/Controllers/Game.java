@@ -28,6 +28,7 @@ public class Game {
 
     /** handles the update of the current level, and jumps to next level if current is won
      * @param input input from the key detection
+     * @throws SlickException
      */
     public void update(Input input) throws SlickException {
         if (!update) {
@@ -56,6 +57,7 @@ public class Game {
 
     /**
      * autonomously starts the next level, stops if max level reached
+     * @throws SlickException
      */
     public void startNextLevel() throws SlickException {
         update = false;

@@ -21,6 +21,7 @@ public class Floor extends BasicObject {
      * @param object the incoming object
      * @param direction the direction that the object is moving towards
      * @return Boolean, if the current object can be pushed away
+     * @throws SlickException
      */
     @Override
     public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException {

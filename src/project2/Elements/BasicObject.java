@@ -35,9 +35,8 @@ abstract public class BasicObject {
 
 
     /** handles updates for current object
-     * @param direction the direction that the object is moving towards
      */
-    public void update(Extra.Directions direction) throws SlickException {
+    public void update() throws SlickException {
         // do nothing by default
     }
 
@@ -48,6 +47,7 @@ abstract public class BasicObject {
      * @param object the incoming object
      * @param direction the direction that the object is moving towards
      * @return Boolean, if the current object can be pushed away
+     * @throws SlickException
      */
     abstract public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException;
 
@@ -74,7 +74,7 @@ abstract public class BasicObject {
      */
     public Boolean move(Extra.Directions direction) throws SlickException {
         BasicCell destination = getCellOnDirection(direction);
-        return destination.getObject().contact(this, direction);
+        return destination.getRootObject().contact(this, direction);
     }
 
 
@@ -194,6 +194,11 @@ abstract public class BasicObject {
 
 
     /* getters and setters */
+    protected void setObjectTile(String name) throws SlickException {
+        this.objectTile = new Image("res/" + name + ".png");
+    }
+
+
     public Integer getColumn() {
         return getCell().getColumn();
     }
@@ -246,9 +251,5 @@ abstract public class BasicObject {
             return true;
         }
         return false;
-    }
-
-    public void setObjectTile(String name) throws SlickException {
-        this.objectTile = new Image("res/" + name + ".png");
     }
 }

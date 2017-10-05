@@ -14,14 +14,15 @@ abstract public class Character extends BasicObject {
     }
 
 
-
-    /* helper functions */
-
-
+    /**
+     * @param object    the incoming object
+     * @param direction the direction that the object is moving towards
+     * @return whether the current object has moved or not
+     * @throws SlickException
+     */
     @Override
     public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException {
-        move(direction);
-        return true;
+        return move(direction);
     }
 
 }

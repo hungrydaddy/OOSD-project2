@@ -16,4 +16,17 @@ public class Target extends Floor {
         setObjectTile("target");
     }
 
+
+
+    /** detects if this target has a block on it
+     * @return if the target has a block
+     */
+    public Boolean hasBlock() {
+        if (this.getCell().getRootObject().childrenHaveTag(Extra.Tag.BLOCK)) {
+            return true;
+        }
+        return false;
+    }
+
+
 }

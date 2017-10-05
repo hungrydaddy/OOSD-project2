@@ -15,8 +15,12 @@ public class Mage extends Enemy {
 
 
 
+
+    /** the algorithm from the specs to track down player
+     * @throws SlickException
+     */
     @Override
-    public void update(Extra.Directions direction) throws SlickException {
+    public void update() throws SlickException {
         // the method on specs to track down the player
         int distX = (getColumn() - getScene().getPlayer().getColumn());
         int distY = (getRow() - getScene().getPlayer().getRow());
@@ -49,10 +53,10 @@ public class Mage extends Enemy {
 
 
 
-    // a function to check if mage can move
+    // a function to check if mage can move in a specific direction
     private Boolean canMoveInDirection(Extra.Directions direction) {
-        Boolean hasWall = getCellOnDirection(direction).getObject().childrenHaveTag(Extra.Tag.WALL);
-        Boolean hasBlock = getCellOnDirection(direction).getObject().childrenHaveTag(Extra.Tag.BLOCK);
+        Boolean hasWall = getCellOnDirection(direction).getRootObject().childrenHaveTag(Extra.Tag.WALL);
+        Boolean hasBlock = getCellOnDirection(direction).getRootObject().childrenHaveTag(Extra.Tag.BLOCK);
         if (hasWall || hasBlock) {
             return false;
         }

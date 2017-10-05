@@ -21,6 +21,7 @@ public class CrackedWall extends Wall {
      * @param object the incoming object
      * @param direction the direction that the object is moving towards
      * @return false, the cracked wall cannot be pushed away, but it is destroyed with tnt
+     * @throws SlickException
      */
     @Override
     public Boolean contact(BasicObject object, Extra.Directions direction) throws SlickException {

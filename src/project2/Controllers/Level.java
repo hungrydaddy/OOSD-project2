@@ -26,6 +26,10 @@ public class Level {
     }
 
 
+    /** renders the scene and displays number of moves
+     * @param g slick graphics
+     * @throws SlickException
+     */
     public void render(Graphics g) throws SlickException {
         currentScene.render(g);
 
@@ -37,6 +41,7 @@ public class Level {
 
     /**
      * updates for a level, handles key input for player, detects if player died or TNT used
+     * @throws SlickException
      */
     public void update(Input input) throws SlickException {
         if (input.isKeyPressed(Input.KEY_R)) {
@@ -51,19 +56,19 @@ public class Level {
         // updating the player, save if valid move
         if (input.isKeyPressed(Input.KEY_UP)) {
             saveLastScene();
-            currentScene.getPlayer().update(Extra.Directions.UP);
+            currentScene.getPlayer().move(Extra.Directions.UP);
             playerMoved = true;
         } else if (input.isKeyPressed(Input.KEY_DOWN)) {
             saveLastScene();
-            currentScene.getPlayer().update(Extra.Directions.DOWN);
+            currentScene.getPlayer().move(Extra.Directions.DOWN);
             playerMoved = true;
         } else if (input.isKeyPressed(Input.KEY_LEFT)) {
             saveLastScene();
-            currentScene.getPlayer().update(Extra.Directions.LEFT);
+            currentScene.getPlayer().move(Extra.Directions.LEFT);
             playerMoved = true;
         } else if (input.isKeyPressed(Input.KEY_RIGHT)) {
             saveLastScene();
-            currentScene.getPlayer().update(Extra.Directions.RIGHT);
+            currentScene.getPlayer().move(Extra.Directions.RIGHT);
             playerMoved = true;
         }
 
@@ -73,7 +78,7 @@ public class Level {
             return;
         } else { // when updating
             currentScene.update(playerMoved);
-            if (currentScene.getPlayer().playerDead()) { // check if the player died
+            if (currentScene.getPlayer().playerIsDead()) { // check if the player died
                 rewind(true);
             }
             if (currentScene.usedTNT()) { // if tnt used, set true
@@ -89,6 +94,7 @@ public class Level {
 
     /** goes one step backward, or even restart
      * @param restart a state, whether to restart the whole level or to go back one step
+     * @throws SlickException
      */
     public void rewind(Boolean restart) throws SlickException {
         if (!restart && sceneSnapshots.size() == 1) { // if there is only the initial scene
@@ -136,7 +142,6 @@ public class Level {
     private void saveLastScene() {
         sceneSnapshots.add(Extra.snapshot(currentScene));
     }
-
 
     private int getNumberOfMoves() {
         return sceneSnapshots.size() - 1;

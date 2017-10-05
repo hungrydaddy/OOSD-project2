@@ -4,15 +4,12 @@
 
 package project2.Controllers;
 
-import com.sun.org.apache.xml.internal.serializer.OutputPropertiesFactory;
 import project2.Elements.BasicObject;
-import project2.Elements.Environment.Blocks.Ice;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Extra {
 
@@ -75,7 +72,7 @@ public class Extra {
 
 		for (int i = 0; i < scene.getHeight(); i++) {
 			for (int j = 0; j < scene.getWidth(); j++) {
-				extract += translateObjectToString(scene.getMap()[i][j].getObject());
+				extract += translateObjectToString(scene.getMap()[i][j].getRootObject());
 			}
 		}
 
